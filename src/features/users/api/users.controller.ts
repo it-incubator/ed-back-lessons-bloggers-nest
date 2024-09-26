@@ -10,8 +10,13 @@ import {
   Query,
 } from '@nestjs/common';
 import { UsersQueryRepository } from '../infrastructure/users.query-repository';
-import { UserViewDto } from './view-dto/user.view-dto';
+import { UserViewDto } from './view-dto/users.view-dto';
 import { UsersService } from '../application/users.service';
+import {
+  CreateUserInputDto,
+  GetUsersQueryParams,
+} from './input-dto/users.input-dto';
+import { PaginatedViewDto } from '../../../core/dto/base.paginated.view-dto';
 
 @Controller('users')
 export class UsersController {
@@ -26,12 +31,15 @@ export class UsersController {
   }
 
   @Get()
-  async getAll(@Query() query: any): Promise<UserViewDto[]> {
-    return this.usersQueryRepository.getAll();
+  async getAll(
+    @Query() query: GetUsersQueryParams,
+  ): Promise<PaginatedViewDto<UserViewDto[]>> {
+    return this.usersQueryRepository.getAll(query);
   }
 
   @Post()
-  async createUser(@Body() body: any): Promise<UserViewDto> {
+  async createUser(@Body() body: CreateUserInputDto): Promise<UserViewDto> {
+    console.log(body, 'BODY');
     const userId = await this.usersService.createUser(body);
 
     return this.usersQueryRepository.getByIdOrNotFoundFail(userId);

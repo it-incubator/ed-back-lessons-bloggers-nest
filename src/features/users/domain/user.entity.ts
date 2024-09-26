@@ -6,7 +6,9 @@ export enum DeletionStatus {
   NotDeleted = 'not-deleted',
   PermanentDeleted = 'permanent-deleted',
 }
-@Schema()
+
+//флаг timestemp автоматичеки добавляет поля upatedAt и createdAt
+@Schema({ timestamps: true })
 export class User {
   @Prop({ type: String, required: true })
   login: string;
@@ -17,7 +19,8 @@ export class User {
   @Prop({ type: String, required: true })
   email: string;
 
-  @Prop({ type: Date, default: new Date() })
+  //описываем явно поле createdAt несмотря на флаг timestamp: true
+  @Prop({ type: Date })
   createdAt: Date;
 
   @Prop({ enum: DeletionStatus, default: DeletionStatus.NotDeleted })
