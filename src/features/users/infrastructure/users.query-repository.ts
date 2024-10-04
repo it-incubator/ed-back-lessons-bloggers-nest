@@ -29,7 +29,6 @@ export class UsersQueryRepository {
   async getAll(
     query: GetUsersQueryParams,
   ): Promise<PaginatedViewDto<UserViewDto[]>> {
-    console.log(query);
     const filter: FilterQuery<User> = {
       $or: [
         { login: { $regex: query.searchLoginTerm || '', $options: 'i' } },
