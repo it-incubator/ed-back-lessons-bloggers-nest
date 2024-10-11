@@ -15,8 +15,8 @@ export enum UsersSortBy {
 }
 
 //dto для запроса списка юзеров с пагинацией, сортировкой, фильтрами
-export class GetUsersQueryParams extends BaseSortablePaginationParams {
-  sortBy: UsersSortBy = UsersSortBy.CreatedAt;
+export class GetUsersQueryParams extends BaseSortablePaginationParams<UsersSortBy> {
+  sortBy = UsersSortBy.CreatedAt;
   searchLoginTerm: string | null = null;
   searchEmailTerm: string | null = null;
 }

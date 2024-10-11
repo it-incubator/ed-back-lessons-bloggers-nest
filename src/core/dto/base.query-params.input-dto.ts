@@ -16,7 +16,7 @@ export enum SortDirection {
 
 //базовый класс для query параметров с сортировкой и пагинацией
 //поле sortBy должно быть реализовано в наследниках
-export abstract class BaseSortablePaginationParams extends PaginationParams {
+export abstract class BaseSortablePaginationParams<T> extends PaginationParams {
   sortDirection: SortDirection = SortDirection.Desc;
-  abstract sortBy: string;
+  abstract sortBy: T;
 }
