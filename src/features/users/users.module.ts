@@ -12,6 +12,6 @@ import { UsersQueryRepository } from './infrastructure/users.query-repository';
   ],
   controllers: [UsersController],
   providers: [UsersService, UsersRepository, UsersQueryRepository],
-  exports: [UsersRepository],
+  exports: [UsersRepository, MongooseModule],
 })
 export class UsersModule {}
