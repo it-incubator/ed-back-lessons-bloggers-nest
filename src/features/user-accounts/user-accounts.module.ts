@@ -22,6 +22,6 @@ import { SecurityDevicesController } from './api/security-devices.controller';
     SecurityDevicesQueryRepository,
     AuthQueryRepository,
   ],
-  exports: [UsersRepository],
+  exports: [UsersRepository, MongooseModule],
 })
 export class UserAccountsModule {}
