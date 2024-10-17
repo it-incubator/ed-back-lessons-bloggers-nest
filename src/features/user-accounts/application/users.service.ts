@@ -15,7 +15,7 @@ export class UsersService {
   ) {}
 
   async createUser(dto: CreateUserDto): Promise<string> {
-    //TODO: move to brypt service
+    //TODO: move to bcrypt service
     const passwordHash = await bcrypt.hash(dto.password, 10);
 
     const user = this.UserModel.createInstance({
