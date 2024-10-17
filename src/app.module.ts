@@ -6,8 +6,6 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { TestingModule } from './features/testing/testing.module';
 import { BloggersPlatformModule } from './features/bloggers-platform/bloggers-platform.module';
 import { CoreModule } from './core/core.module';
-import { AserAccountModule } from './aser-account/aser-account.module';
-import { UsersController } from './features/users/users.controller';
 
 @Module({
   imports: [
@@ -16,9 +14,8 @@ import { UsersController } from './features/users/users.controller';
     TestingModule,
     BloggersPlatformModule,
     CoreModule,
-    AserAccountModule,
   ],
-  controllers: [AppController, UsersController],
+  controllers: [AppController],
   providers: [AppService],
 })
 export class AppModule {}
