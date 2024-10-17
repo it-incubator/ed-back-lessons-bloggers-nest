@@ -9,7 +9,7 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
-import { UsersQueryRepository } from '../infrastructure/users.query-repository';
+import { UsersQueryRepository } from '../infrastructure/query/users.query-repository';
 import { UserViewDto } from './view-dto/users.view-dto';
 import { UsersService } from '../application/users.service';
 import {

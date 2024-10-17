@@ -1,5 +1,5 @@
 import { Controller, Delete } from '@nestjs/common';
-import { User, UserModelType } from '../users/domain/user.entity';
+import { User, UserModelType } from '../user-accounts/domain/user.entity';
 import { InjectModel } from '@nestjs/mongoose';
 
 @Controller('testing')
@@ -9,7 +9,7 @@ export class TestingController {
     private UserModel: UserModelType,
   ) {}
 
-  @Delete()
+  @Delete('all-data')
   deleteAll() {
     this.UserModel.deleteMany();
   }
