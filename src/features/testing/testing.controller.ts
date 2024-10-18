@@ -11,6 +11,6 @@ export class TestingController {
 
   @Delete('all-data')
   deleteAll() {
-    this.UserModel.deleteMany();
+    return this.UserModel.deleteMany();
   }
 }

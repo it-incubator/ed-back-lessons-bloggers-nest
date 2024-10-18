@@ -1,19 +1,11 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { ValidationPipe } from '@nestjs/common';
+import { configApp } from './config/config-app';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  //специальный метод, который добавляет ко всем маршрутам /api
-  app.setGlobalPrefix('api');
-  //Глобальный пайп для валидации и трансформации входящих данных.
-  //На следующем занятии рассмотрим подробнее
-  app.useGlobalPipes(
-    new ValidationPipe({
-      //эта настройка нужна для применения значений по-умолчанию
-      transform: true,
-    }),
-  );
+  configApp(app); //глобальные настройки приложения
+
   await app.listen(5005);
 }
 bootstrap();
