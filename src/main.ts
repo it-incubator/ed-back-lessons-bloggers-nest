@@ -6,6 +6,10 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   configApp(app); //глобальные настройки приложения
 
-  await app.listen(5005);
+  const PORT = 5005;
+
+  await app.listen(PORT, () => {
+    console.log('Server is running on port ' + PORT);
+  });
 }
 bootstrap();

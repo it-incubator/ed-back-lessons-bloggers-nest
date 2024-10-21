@@ -37,7 +37,10 @@ export class UsersQueryRepository {
       ],
     };
 
-    const users = await this.UserModel.find(filter)
+    const users = await this.UserModel.find({
+      ...filter,
+      deletionStatus: DeletionStatus.NotDeleted,
+    })
       .sort({ [query.sortBy]: query.sortDirection })
       .skip(query.calculateSkip())
       .limit(query.pageSize);

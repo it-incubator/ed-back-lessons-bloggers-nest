@@ -17,6 +17,7 @@ import {
   GetUsersQueryParams,
 } from './input-dto/users.input-dto';
 import { PaginatedViewDto } from '../../../core/dto/base.paginated.view-dto';
+import { ApiParam } from '@nestjs/swagger';
 
 @Controller('users')
 export class UsersController {
@@ -25,8 +26,9 @@ export class UsersController {
     private usersService: UsersService,
   ) {}
 
+  @ApiParam({ name: 'id' }) //для сваггера
   @Get(':id')
-  async getById(@Param() id: string): Promise<UserViewDto> {
+  async getById(@Param('id') id: string): Promise<UserViewDto> {
     return this.usersQueryRepository.getByIdOrNotFoundFail(id);
   }
 
@@ -44,9 +46,10 @@ export class UsersController {
     return this.usersQueryRepository.getByIdOrNotFoundFail(userId);
   }
 
+  @ApiParam({ name: 'id' }) //для сваггера
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  async deleteUser(@Param() id: string): Promise<void> {
+  async deleteUser(@Param('id') id: string): Promise<void> {
     return this.usersService.deleteUser(id);
   }
 }
