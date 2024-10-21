@@ -5,12 +5,10 @@ export function pipesSetup(app: INestApplication) {
   //На следующем занятии рассмотрим подробнее
   app.useGlobalPipes(
     new ValidationPipe({
-      //эта настройка нужна для применения значений по-умолчанию
+      //class-transformer создает экземпляр dto
+      //соответственно применятся значения по-умолчанию
+      //и методы классов dto
       transform: true,
-      //эта настройка нужна для трансформации входящих параметров (например, "/?page=1"), будет трансформировано в number, если используется декоратор для валидации
-      transformOptions: {
-        enableImplicitConversion: true,
-      },
     }),
   );
 }
