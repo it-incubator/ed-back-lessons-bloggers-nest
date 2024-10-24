@@ -6,8 +6,10 @@ import {
   HttpCode,
   HttpStatus,
   Param,
+  ParseIntPipe,
   Post,
   Query,
+  ValidationPipe,
 } from '@nestjs/common';
 import { UsersQueryRepository } from '../infrastructure/query/users.query-repository';
 import { UserViewDto } from './view-dto/users.view-dto';
@@ -49,7 +51,9 @@ export class UsersController {
   @ApiParam({ name: 'id' }) //для сваггера
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  async deleteUser(@Param('id') id: string): Promise<void> {
+  //ParseIntPipe может использоваться для трансформации строки в число, если id: number.
+  // Можно так же использовать класс dto по аналогии с query и body
+  async deleteUser(@Param('id' /*,ParseIntPipe*/) id: string): Promise<void> {
     return this.usersService.deleteUser(id);
   }
 }

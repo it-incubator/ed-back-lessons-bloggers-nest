@@ -9,6 +9,7 @@ import { AuthController } from './api/auth.controller';
 import { SecurityDevicesQueryRepository } from './infrastructure/query/security-devices.query-repository';
 import { AuthQueryRepository } from './infrastructure/query/auth.query-repository';
 import { SecurityDevicesController } from './api/security-devices.controller';
+import { LoginIsExistConstraint } from './api/validation/login-is-exist.decorator';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { SecurityDevicesController } from './api/security-devices.controller';
     UsersQueryRepository,
     SecurityDevicesQueryRepository,
     AuthQueryRepository,
+    LoginIsExistConstraint,
   ],
   exports: [UsersRepository, MongooseModule],
 })

@@ -38,4 +38,8 @@ export class UsersRepository {
 
     return user;
   }
+
+  async loginIsExist(login: string): Promise<boolean> {
+    return !!(await this.UserModel.countDocuments({ login: login }));
+  }
 }
