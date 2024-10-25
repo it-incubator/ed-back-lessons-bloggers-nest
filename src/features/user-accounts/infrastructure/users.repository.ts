@@ -6,6 +6,7 @@ import {
   UserModelType,
 } from '../domain/user.entity';
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { NotFoundDomainException } from '../../../core/exceptions/domain-exceptions';
 
 @Injectable()
 export class UsersRepository {
@@ -26,14 +27,13 @@ export class UsersRepository {
     const user = await this.findById(id);
 
     if (!user) {
-      //TODO: replace with domain exception
-      throw new NotFoundException('user not found');
+      throw NotFoundDomainException.create('user not found');
     }
 
     if (user.deletionStatus === DeletionStatus.PermanentDeleted) {
       console.log('user ' + user._id.toString() + ' was deleted');
-      //TODO: replace with domain exception
-      throw new NotFoundException('user not found');
+
+      throw NotFoundDomainException.create('user not found');
     }
 
     return user;
