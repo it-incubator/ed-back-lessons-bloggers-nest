@@ -9,7 +9,6 @@ import {
   ParseIntPipe,
   Post,
   Query,
-  ValidationPipe,
 } from '@nestjs/common';
 import { UsersQueryRepository } from '../infrastructure/query/users.query-repository';
 import { UserViewDto } from './view-dto/users.view-dto';
