@@ -5,7 +5,7 @@ import {
   UserDocument,
   UserModelType,
 } from '../domain/user.entity';
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { NotFoundDomainException } from '../../../core/exceptions/domain-exceptions';
 
 @Injectable()
