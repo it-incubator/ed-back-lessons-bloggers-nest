@@ -53,6 +53,10 @@ export class User {
   makeDeleted() {
     this.deletionStatus = DeletionStatus.PermanentDeleted;
   }
+
+  setConfirmationCode(code: string) {
+    //logic
+  }
 }
 
 export const UserSchema = SchemaFactory.createForClass(User);

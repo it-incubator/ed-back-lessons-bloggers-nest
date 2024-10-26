@@ -5,14 +5,14 @@ import {
   Get,
   HttpCode,
   HttpStatus,
+  Inject,
   Param,
   ParseIntPipe,
   Post,
   Query,
 } from '@nestjs/common';
-import { UsersQueryRepository } from '../infrastructure/query/users.query-repository';
+import { IUserQueryRepository } from '../infrastructure/query/users.query-repository';
 import { UserViewDto } from './view-dto/users.view-dto';
-import { UsersService } from '../application/users.service';
 import {
   CreateUserInputDto,
   GetUsersQueryParams,
@@ -20,11 +20,22 @@ import {
 import { PaginatedViewDto } from '../../../core/dto/base.paginated.view-dto';
 import { ApiParam } from '@nestjs/swagger';
 
+import { USER_QUERY_REPO_TOKEN } from '../constants/users.inject-tokens';
+import { CommandBus } from '@nestjs/cqrs';
+import { CreateUserCommand } from '../application/usecases/create-user.usecase';
+import { DeleteUserCommand } from '../application/usecases/delete-user.usecase';
+
 @Controller('users')
 export class UsersController {
   constructor(
-    private usersQueryRepository: UsersQueryRepository,
-    private usersService: UsersService,
+    //инжектирование через токен
+    @Inject(USER_QUERY_REPO_TOKEN)
+    private usersQueryRepository: IUserQueryRepository<
+      UserViewDto,
+      GetUsersQueryParams
+    >,
+    //private usersService: UsersService,
+    private readonly commandBus: CommandBus,
   ) {}
 
   @ApiParam({ name: 'id' }) //для сваггера
@@ -42,7 +53,9 @@ export class UsersController {
 
   @Post()
   async createUser(@Body() body: CreateUserInputDto): Promise<UserViewDto> {
-    const userId = await this.usersService.createUser(body);
+    const userId = await this.commandBus.execute<CreateUserCommand, string>(
+      new CreateUserCommand(body),
+    );
 
     return this.usersQueryRepository.getByIdOrNotFoundFail(userId);
   }
@@ -53,6 +66,6 @@ export class UsersController {
   //ParseIntPipe может использоваться для трансформации строки в число, если id: number.
   // Можно так же использовать класс dto по аналогии с query и body
   async deleteUser(@Param('id' /*,ParseIntPipe*/) id: string): Promise<void> {
-    return this.usersService.deleteUser(id);
+    return this.commandBus.execute(new DeleteUserCommand(id));
   }
 }

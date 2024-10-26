@@ -49,7 +49,7 @@ export class AllExceptionsFilter extends BaseExceptionFilter {
         : HttpStatus.INTERNAL_SERVER_ERROR;
 
     //TODO: Replace with getter from configService
-    const isProduction = process.env.NODE_ENV === 'production';
+    const isProduction = process.env.ENV === 'PRODUCTION';
 
     if (isProduction && status === HttpStatus.INTERNAL_SERVER_ERROR) {
       response.status(status).json({

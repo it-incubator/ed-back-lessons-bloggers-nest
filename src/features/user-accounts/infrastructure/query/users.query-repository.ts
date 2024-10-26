@@ -8,8 +8,16 @@ import { GetUsersQueryParams } from '../../api/input-dto/users.input-dto';
 import { PaginatedViewDto } from '../../../../core/dto/base.paginated.view-dto';
 import { NotFoundDomainException } from '../../../../core/exceptions/domain-exceptions';
 
+//для примера инжектирования через токен
+export interface IUserQueryRepository<TEntity, TQuery> {
+  getByIdOrNotFoundFail(id: string): Promise<TEntity>;
+  getAll(query: TQuery): Promise<PaginatedViewDto<TEntity[]>>;
+}
+
 @Injectable()
-export class UsersQueryRepository {
+export class UsersQueryRepository
+  implements IUserQueryRepository<UserViewDto, GetUsersQueryParams>
+{
   constructor(
     @InjectModel(User.name)
     private UserModel: UserModelType,

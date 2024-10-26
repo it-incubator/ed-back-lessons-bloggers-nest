@@ -5,6 +5,8 @@ import { CreateUserDto } from '../dto/create-user.dto';
 import bcrypt from 'bcrypt';
 import { UsersRepository } from '../infrastructure/users.repository';
 
+//DEPRECATED
+//TODO: remove
 @Injectable()
 export class UsersService {
   constructor(
