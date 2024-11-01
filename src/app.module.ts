@@ -12,9 +12,11 @@ import configuration, {
   validate,
 } from './config/env/configuration';
 import { Environments } from './config/env/env-settings';
+import { CounterModule } from './features/scoped-logger-example/counter.module';
 
 @Module({
   imports: [
+    CounterModule,
     MongooseModule.forRootAsync({
       useFactory: (configService: ConfigService<ConfigurationType, true>) => {
         const databaseSettings = configService.get('databaseSettings', {
