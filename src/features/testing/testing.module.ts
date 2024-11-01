@@ -1,9 +1,25 @@
-import { Module } from '@nestjs/common';
+import { DynamicModule, Module } from '@nestjs/common';
 import { TestingController } from './testing.controller';
 import { UserAccountsModule } from '../user-accounts/user-accounts.module';
 
-@Module({
-  imports: [UserAccountsModule],
-  controllers: [TestingController],
-})
-export class TestingModule {}
+@Module({})
+export class TestingModule {
+  static register(): DynamicModule {
+    if (process.env.ENV !== 'PRODUCTION') {
+      return {
+        module: TestingModule,
+        imports: [UserAccountsModule],
+        controllers: [TestingController],
+        providers: [],
+      };
+    }
+
+    return {
+      module: TestingModule,
+      // Пустой массив controllers, чтобы отключить модуль
+      providers: [],
+      imports: [],
+      controllers: [],
+    };
+  }
+}

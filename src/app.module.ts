@@ -33,7 +33,7 @@ import { CounterModule } from './features/scoped-logger-example/counter.module';
       inject: [ConfigService],
     }),
     UserAccountsModule, //все модули должны быть заимпортированы в корневой модуль, либо напрямую, либо по цепочке (через другие модули)
-    TestingModule,
+    TestingModule.register(),
     BloggersPlatformModule,
     CoreModule,
     ConfigModule.forRoot({
