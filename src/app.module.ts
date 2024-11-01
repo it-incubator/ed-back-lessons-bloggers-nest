@@ -13,6 +13,7 @@ import configuration, {
 } from './config/env/configuration';
 import { Environments } from './config/env/env-settings';
 import { CounterModule } from './features/scoped-logger-example/counter.module';
+import * as process from 'node:process';
 
 @Module({
   imports: [
@@ -33,7 +34,7 @@ import { CounterModule } from './features/scoped-logger-example/counter.module';
       inject: [ConfigService],
     }),
     UserAccountsModule, //все модули должны быть заимпортированы в корневой модуль, либо напрямую, либо по цепочке (через другие модули)
-    TestingModule.register(),
+    TestingModule.register(process.env.ENV as string),
     BloggersPlatformModule,
     CoreModule,
     ConfigModule.forRoot({

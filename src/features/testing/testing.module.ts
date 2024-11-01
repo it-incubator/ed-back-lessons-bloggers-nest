@@ -4,8 +4,8 @@ import { UserAccountsModule } from '../user-accounts/user-accounts.module';
 
 @Module({})
 export class TestingModule {
-  static register(): DynamicModule {
-    if (process.env.ENV !== 'PRODUCTION') {
+  static register(env: string): DynamicModule {
+    if (env !== 'PRODUCTION') {
       return {
         module: TestingModule,
         imports: [UserAccountsModule],
