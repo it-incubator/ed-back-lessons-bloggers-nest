@@ -1,9 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { User, UserModelType } from '../domain/user.entity';
-import { CreateUserDto } from '../dto/create-user.dto';
+import { CreateUserDto, UpdateUserDto } from '../dto/create-user.dto';
 import bcrypt from 'bcrypt';
 import { UsersRepository } from '../infrastructure/users.repository';
+import { NotFoundError } from 'rxjs';
 
 @Injectable()
 export class UsersService {
@@ -28,9 +29,18 @@ export class UsersService {
 
     return user._id.toString();
   }
+  async updateUser(id: string, dto: UpdateUserDto): Promise<string> {
+    const user = await this.usersRepository.findOrNotFoundFail(id);
+
+    user.update(dto);
+
+    await this.usersRepository.save(user);
+
+    return user._id.toString();
+  }
 
   async deleteUser(id: string) {
-    const user = await this.usersRepository.findNonDeletedOrNotFoundFail(id);
+    const user = await this.usersRepository.findOrNotFoundFail(id);
 
     user.makeDeleted();
 
