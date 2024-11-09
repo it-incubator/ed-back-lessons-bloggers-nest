@@ -1,0 +1,9 @@
+services:
+  mongodb:
+    image: mongo:latest
+    container_name: mongo-nest-blogger
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_DATABASE: nest-bloggers-platform
+    command: mongod --noauth
