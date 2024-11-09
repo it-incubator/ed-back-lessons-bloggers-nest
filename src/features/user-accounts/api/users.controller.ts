@@ -8,17 +8,17 @@ import {
   Param,
   ParseIntPipe,
   Post,
+  Put,
   Query,
 } from '@nestjs/common';
 import { UsersQueryRepository } from '../infrastructure/query/users.query-repository';
 import { UserViewDto } from './view-dto/users.view-dto';
 import { UsersService } from '../application/users.service';
-import {
-  CreateUserInputDto,
-  GetUsersQueryParams,
-} from './input-dto/users.input-dto';
+import { CreateUserInputDto } from './input-dto/users.input-dto';
 import { PaginatedViewDto } from '../../../core/dto/base.paginated.view-dto';
 import { ApiParam } from '@nestjs/swagger';
+import { UpdateUserInputDto } from './input-dto/update-user-input.dto';
+import { GetUsersQueryParams } from './input-dto/get-users-query-params';
 
 @Controller('users')
 export class UsersController {
@@ -43,6 +43,16 @@ export class UsersController {
   @Post()
   async createUser(@Body() body: CreateUserInputDto): Promise<UserViewDto> {
     const userId = await this.usersService.createUser(body);
+
+    return this.usersQueryRepository.getByIdOrNotFoundFail(userId);
+  }
+
+  @Put(':id')
+  async updateUser(
+    @Param('id') id: string,
+    @Body() body: UpdateUserInputDto,
+  ): Promise<UserViewDto> {
+    const userId = await this.usersService.updateUser(id, body);
 
     return this.usersQueryRepository.getByIdOrNotFoundFail(userId);
   }

@@ -1,6 +1,6 @@
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument, Model } from 'mongoose';
-import { CreateUserDto } from '../dto/create-user.dto';
+import { CreateUserDto, UpdateUserDto } from '../dto/create-user.dto';
 
 export enum DeletionStatus {
   NotDeleted = 'not-deleted',
@@ -33,6 +33,9 @@ export class User {
   @Prop({ type: String, required: true, ...emailConstraints })
   email: string;
 
+  @Prop({ type: Boolean, required: true, default: false })
+  isEmailConfirmed: boolean;
+
   //описываем явно поле createdAt несмотря на флаг timestamp: true
   @Prop({ type: Date })
   createdAt: Date;
@@ -51,7 +54,17 @@ export class User {
   }
 
   makeDeleted() {
+    if (this.deletionStatus !== DeletionStatus.NotDeleted) {
+      throw new Error('Entity already deleted');
+    }
     this.deletionStatus = DeletionStatus.PermanentDeleted;
+  }
+
+  update(dto: UpdateUserDto) {
+    if (dto.email !== this.email) {
+      this.isEmailConfirmed = false;
+    }
+    this.email = dto.email;
   }
 }
 
