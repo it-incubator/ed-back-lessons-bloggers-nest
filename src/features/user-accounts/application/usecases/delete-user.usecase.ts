@@ -12,8 +12,7 @@ export class DeleteUserUseCase
   constructor(private usersRepository: UsersRepository) {}
 
   async execute({ userId }: DeleteUserCommand): Promise<void> {
-    const user =
-      await this.usersRepository.findNonDeletedOrNotFoundFail(userId);
+    const user = await this.usersRepository.findOrNotFoundFail(userId);
 
     user.makeDeleted();
 

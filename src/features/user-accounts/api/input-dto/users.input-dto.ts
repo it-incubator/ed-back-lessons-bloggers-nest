@@ -1,13 +1,5 @@
 import { CreateUserDto } from '../../dto/create-user.dto';
-import { BaseSortablePaginationParams } from '../../../../core/dto/base.query-params.input-dto';
-import {
-  IsEmail,
-  IsEnum,
-  IsOptional,
-  IsString,
-  Length,
-  Matches,
-} from 'class-validator';
+import { IsEmail, IsString, Length, Matches } from 'class-validator';
 import { Trim } from '../../../../core/decorators/transform/trim';
 import {
   emailConstraints,
@@ -36,23 +28,4 @@ export class CreateUserInputDto implements CreateUserDto {
   //@Matches(emailConstraints.match)
   @Trim()
   email: string;
-}
-
-export enum UsersSortBy {
-  CreatedAt = 'createdAt',
-  Login = 'login',
-  Email = 'email',
-}
-
-//dto для запроса списка юзеров с пагинацией, сортировкой, фильтрами
-export class GetUsersQueryParams extends BaseSortablePaginationParams<UsersSortBy> {
-  @IsEnum(UsersSortBy)
-  sortBy = UsersSortBy.CreatedAt;
-  @IsString()
-  @IsOptional()
-  searchLoginTerm: string | null = null;
-
-  @IsString()
-  @IsOptional()
-  searchEmailTerm: string | null = null;
 }
