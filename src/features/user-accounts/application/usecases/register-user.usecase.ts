@@ -31,8 +31,7 @@ export class RegisterUserUseCase
 
     const confirmCode = 'uuid';
 
-    const user =
-      await this.usersRepository.findNonDeletedOrNotFoundFail(createdUserId);
+    const user = await this.usersRepository.findOrNotFoundFail(createdUserId);
 
     user.setConfirmationCode(confirmCode);
     await this.usersRepository.save(user);

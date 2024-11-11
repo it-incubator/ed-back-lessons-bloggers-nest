@@ -14,7 +14,6 @@ import {
 } from '@nestjs/common';
 import { IUserQueryRepository } from '../infrastructure/query/users.query-repository';
 import { UserViewDto } from './view-dto/users.view-dto';
-import { UsersService } from '../application/users.service';
 import { CreateUserInputDto } from './input-dto/users.input-dto';
 import { PaginatedViewDto } from '../../../core/dto/base.paginated.view-dto';
 import { ApiParam } from '@nestjs/swagger';
@@ -25,6 +24,7 @@ import { USER_QUERY_REPO_TOKEN } from '../constants/users.inject-tokens';
 import { CommandBus } from '@nestjs/cqrs';
 import { CreateUserCommand } from '../application/usecases/create-user.usecase';
 import { DeleteUserCommand } from '../application/usecases/delete-user.usecase';
+import { UpdateUserCommand } from '../application/usecases/update-user.usecase';
 
 @Controller('users')
 export class UsersController {
@@ -66,10 +66,11 @@ export class UsersController {
     @Param('id') id: string,
     @Body() body: UpdateUserInputDto,
   ): Promise<UserViewDto> {
-    //TODO replace with commandBus
-    //const userId = await this.usersService.updateUser(id, body);
+    await this.commandBus.execute<UpdateUserCommand, void>(
+      new UpdateUserCommand(id, body),
+    );
 
-    //return this.usersQueryRepository.getByIdOrNotFoundFail(userId);
+    return this.usersQueryRepository.getByIdOrNotFoundFail(id);
   }
 
   @ApiParam({ name: 'id' }) //для сваггера
