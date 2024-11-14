@@ -10,17 +10,21 @@ import {
   Post,
   Put,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import { UsersQueryRepository } from '../infrastructure/query/users.query-repository';
 import { UserViewDto } from './view-dto/users.view-dto';
 import { UsersService } from '../application/users.service';
 import { CreateUserInputDto } from './input-dto/users.input-dto';
 import { PaginatedViewDto } from '../../../core/dto/base.paginated.view-dto';
-import { ApiParam } from '@nestjs/swagger';
+import { ApiBasicAuth, ApiParam } from '@nestjs/swagger';
 import { UpdateUserInputDto } from './input-dto/update-user-input.dto';
 import { GetUsersQueryParams } from './input-dto/get-users-query-params';
+import { BasicAuthGuard } from '../../../core/guards/basic-auth.guard';
 
 @Controller('users')
+@UseGuards(BasicAuthGuard)
+@ApiBasicAuth('basicAuth')
 export class UsersController {
   constructor(
     private usersQueryRepository: UsersQueryRepository,

@@ -5,6 +5,8 @@ import {
   UseGuards,
   Request,
   Get,
+  HttpCode,
+  HttpStatus,
 } from '@nestjs/common';
 import { UsersService } from '../application/users.service';
 import { CreateUserInputDto } from './input-dto/users.input-dto';
@@ -30,6 +32,7 @@ export class AuthController {
   }
 
   @Post('login')
+  @HttpCode(HttpStatus.OK)
   @UseGuards(LocalAuthGuard)
   //swagger doc
   @ApiBody({

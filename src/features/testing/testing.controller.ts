@@ -1,17 +1,25 @@
 import { Controller, Delete, HttpCode, HttpStatus } from '@nestjs/common';
-import { User, UserModelType } from '../user-accounts/domain/user.entity';
-import { InjectModel } from '@nestjs/mongoose';
+import { InjectConnection } from '@nestjs/mongoose';
+import { Connection } from 'mongoose';
 
 @Controller('testing')
 export class TestingController {
   constructor(
-    @InjectModel(User.name)
-    private UserModel: UserModelType,
+    @InjectConnection() private readonly databaseConnection: Connection,
   ) {}
 
   @Delete('all-data')
   @HttpCode(HttpStatus.NO_CONTENT)
-  deleteAll() {
-    this.UserModel.deleteMany();
+  async deleteAll() {
+    const collections = await this.databaseConnection.listCollections();
+
+    const promises = collections.map((collection) =>
+      this.databaseConnection.collection(collection.name).deleteMany({}),
+    );
+    await Promise.all(promises);
+
+    return {
+      status: 'succeeded',
+    };
   }
 }

@@ -18,7 +18,6 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
    * @param payload
    */
   async validate(payload: UserContext): Promise<UserContext> {
-    console.log(payload, 'guard strategy');
     return payload;
   }
 }
