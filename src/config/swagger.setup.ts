@@ -7,6 +7,7 @@ export function swaggerSetup(app: INestApplication) {
     .setTitle('BLOGGER API')
     .addBearerAuth()
     .setVersion('1.0')
+    .addBearerAuth()
     .build();
 
   const document = SwaggerModule.createDocument(app, config);

@@ -60,6 +60,10 @@ export class User {
     this.deletionStatus = DeletionStatus.PermanentDeleted;
   }
 
+  setConfirmationCode(code: string) {
+    //logic
+  }
+
   update(dto: UpdateUserDto) {
     if (dto.email !== this.email) {
       this.isEmailConfirmed = false;
