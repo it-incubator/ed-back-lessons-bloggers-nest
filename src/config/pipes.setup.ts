@@ -7,6 +7,7 @@ type ErrorResponse = { message: string; key: string };
 
 //функция использует рекурсию для обхода объекта children при вложенных полях при валидации
 //поставьте логи и разберитесь как она работает
+//TODO: tests
 export const errorFormatter = (
   errors: ValidationError[],
   errorMessage?: any,
