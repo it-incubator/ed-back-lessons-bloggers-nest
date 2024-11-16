@@ -1,6 +1,6 @@
 export enum DomainExceptionCode {
   NotFound = 1,
-  BedRequest,
-  Forbidden,
-  Unauthorized,
+  BadRequest = 2,
+  Forbidden = 3,
+  Unauthorized = 4,
 }

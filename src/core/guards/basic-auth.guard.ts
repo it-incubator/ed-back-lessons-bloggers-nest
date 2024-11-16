@@ -7,7 +7,7 @@ export class BasicAuthGuard implements CanActivate {
   private readonly validUsername = 'admin';
   private readonly validPassword = 'qwerty';
 
-  canActivate(context: ExecutionContext): boolean {
+  async canActivate(context: ExecutionContext): Promise<boolean> {
     const request = context.switchToHttp().getRequest<Request>();
     const authHeader = request.headers.authorization;
 
@@ -24,6 +24,7 @@ export class BasicAuthGuard implements CanActivate {
     if (username === this.validUsername && password === this.validPassword) {
       return true;
     } else {
+      return false;
       throw UnauthorizedDomainException.create();
     }
   }

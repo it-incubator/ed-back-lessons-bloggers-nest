@@ -21,6 +21,7 @@ import { ApiBasicAuth, ApiParam } from '@nestjs/swagger';
 import { UpdateUserInputDto } from './input-dto/update-user-input.dto';
 import { GetUsersQueryParams } from './input-dto/get-users-query-params';
 import { BasicAuthGuard } from '../../../core/guards/basic-auth.guard';
+import { Types } from 'mongoose';
 
 @Controller('users')
 @UseGuards(BasicAuthGuard)
@@ -53,10 +54,10 @@ export class UsersController {
 
   @Put(':id')
   async updateUser(
-    @Param('id') id: string,
+    @Param('id') id: Types.ObjectId,
     @Body() body: UpdateUserInputDto,
   ): Promise<UserViewDto> {
-    const userId = await this.usersService.updateUser(id, body);
+    const userId = await this.usersService.updateUser(id.toString(), body);
 
     return this.usersQueryRepository.getByIdOrNotFoundFail(userId);
   }

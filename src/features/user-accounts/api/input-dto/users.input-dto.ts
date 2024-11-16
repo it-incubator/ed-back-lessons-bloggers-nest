@@ -1,8 +1,7 @@
 import { CreateUserDto } from '../../dto/create-user.dto';
-import { IsEmail, IsString, Length, Matches } from 'class-validator';
+import { IsEmail, IsString, Length } from 'class-validator';
 import { Trim } from '../../../../core/decorators/transform/trim';
 import {
-  emailConstraints,
   loginConstraints,
   passwordConstraints,
 } from '../../domain/user.entity';
@@ -25,7 +24,7 @@ export class CreateUserInputDto implements CreateUserDto {
 
   @IsString()
   @IsEmail()
-  //@Matches(emailConstraints.match)
+  // @Matches(emailConstraints.match)
   @Trim()
   email: string;
 }
