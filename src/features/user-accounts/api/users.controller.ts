@@ -16,8 +16,8 @@ import { UsersService } from '../application/users.service';
 import { CreateUserInputDto } from './input-dto/users.input-dto';
 import { PaginatedViewDto } from '../../../core/dto/base.paginated.view-dto';
 import { ApiParam } from '@nestjs/swagger';
-import { UpdateUserInputDto } from './input-dto/update-user-input.dto';
-import { GetUsersQueryParams } from './input-dto/get-users-query-params';
+import { UpdateUserInputDto } from './input-dto/update-user.input-dto';
+import { GetUsersQueryParams } from './input-dto/get-users-query-params.input-dto';
 
 @Controller('users')
 export class UsersController {
