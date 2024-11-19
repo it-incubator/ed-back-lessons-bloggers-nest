@@ -47,11 +47,11 @@ export function pipesSetup(app: INestApplication) {
       //Выдавать первую ошибку для каждого поля
       stopAtFirstError: true,
       //Для преобразования ошибок класс валидатора в необходимый вид
-      // exceptionFactory: (errors) => {
-      //   const formattedErrors = errorFormatter(errors);
-      //
-      //   throw new BadRequestDomainException(formattedErrors);
-      // },
+      exceptionFactory: (errors) => {
+        const formattedErrors = errorFormatter(errors);
+
+        throw new BadRequestDomainException(formattedErrors);
+      },
     }),
   );
 }
