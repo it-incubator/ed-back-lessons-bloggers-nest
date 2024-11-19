@@ -6,7 +6,6 @@ import {
   HttpCode,
   HttpStatus,
   Param,
-  ParseIntPipe,
   Post,
   Put,
   Query,
@@ -18,8 +17,8 @@ import { UsersService } from '../application/users.service';
 import { CreateUserInputDto } from './input-dto/users.input-dto';
 import { PaginatedViewDto } from '../../../core/dto/base.paginated.view-dto';
 import { ApiBasicAuth, ApiParam } from '@nestjs/swagger';
-import { UpdateUserInputDto } from './input-dto/update-user-input.dto';
-import { GetUsersQueryParams } from './input-dto/get-users-query-params';
+import { UpdateUserInputDto } from './input-dto/update-user.input-dto';
+import { GetUsersQueryParams } from './input-dto/get-users-query-params.input-dto';
 import { BasicAuthGuard } from '../../../core/guards/basic-auth.guard';
 import { Types } from 'mongoose';
 
