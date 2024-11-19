@@ -5,8 +5,8 @@ import { Injectable } from '@nestjs/common';
 
 import { FilterQuery } from 'mongoose';
 import { PaginatedViewDto } from '../../../../core/dto/base.paginated.view-dto';
+import { GetUsersQueryParams } from '../../api/input-dto/get-users-query-params.input-dto';
 import { NotFoundDomainException } from '../../../../core/exceptions/domain-exceptions';
-import { GetUsersQueryParams } from '../../api/input-dto/get-users-query-params';
 
 @Injectable()
 export class UsersQueryRepository {
@@ -31,12 +31,21 @@ export class UsersQueryRepository {
   async getAll(
     query: GetUsersQueryParams,
   ): Promise<PaginatedViewDto<UserViewDto[]>> {
-    const filter: FilterQuery<User> = {
-      $or: [
-        { login: { $regex: query.searchLoginTerm || '', $options: 'i' } },
-        { email: { $regex: query.searchEmailTerm || '', $options: 'i' } },
-      ],
-    };
+    const filter: FilterQuery<User> = {};
+
+    if (query.searchLoginTerm) {
+      filter.$or = filter.$or || [];
+      filter.$or.push({
+        login: { $regex: query.searchLoginTerm, $options: 'i' },
+      });
+    }
+
+    if (query.searchEmailTerm) {
+      filter.$or = filter.$or || [];
+      filter.$or.push({
+        email: { $regex: query.searchEmailTerm, $options: 'i' },
+      });
+    }
 
     const users = await this.UserModel.find({
       ...filter,
