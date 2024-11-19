@@ -51,6 +51,7 @@ export class UsersController {
     return this.usersQueryRepository.getByIdOrNotFoundFail(userId);
   }
 
+  @ApiParam({ name: 'id', type: 'string' })
   @Put(':id')
   async updateUser(
     @Param('id') id: Types.ObjectId,
