@@ -9,7 +9,6 @@ import { SecurityDevicesQueryRepository } from './infrastructure/query/security-
 import { AuthQueryRepository } from './infrastructure/query/auth.query-repository';
 import { SecurityDevicesController } from './api/security-devices.controller';
 import { LoginIsExistConstraint } from './api/validation/login-is-exist.decorator';
-import { NotificationsModule } from '../notifications/notifications.module';
 import { AuthService } from './application/auth.service';
 import { LocalStrategy } from './api/guards/local.strategy';
 import { JwtModule } from '@nestjs/jwt';
@@ -17,7 +16,6 @@ import { CryptoService } from './application/crypto.service';
 import { USER_QUERY_REPO_TOKEN } from './constants/users.inject-tokens';
 import { CreateUserUseCase } from './application/usecases/create-user.usecase';
 import { DeleteUserUseCase } from './application/usecases/delete-user.usecase';
-import { SendConfirmationEmailWhenUserCreatedEventHandler } from './application/event-handlers/send-confirmation-email-when-user-created.event-handler';
 import { RegisterUserUseCase } from './application/usecases/register-user.usecase';
 
 @Module({
@@ -30,14 +28,12 @@ import { RegisterUserUseCase } from './application/usecases/register-user.usecas
       signOptions: { expiresIn: '60m' }, // Время жизни токена
     }),
     MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
-    NotificationsModule,
   ],
   controllers: [UsersController, AuthController, SecurityDevicesController],
   providers: [
     //варианты регистрации провайдеров
     UsersRepository,
     DeleteUserUseCase,
-    SendConfirmationEmailWhenUserCreatedEventHandler,
     RegisterUserUseCase,
     {
       provide: CreateUserUseCase,

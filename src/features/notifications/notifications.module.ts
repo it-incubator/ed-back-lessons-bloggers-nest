@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { EmailService } from './email.service';
+import { SendConfirmationEmailWhenUserRegisteredEventHandler } from './event-handlers/send-confirmation-email-when-user-registered-event.handler';
 
 @Module({
   imports: [
@@ -11,7 +12,10 @@ import { EmailService } from './email.service';
       },
     }),
   ],
-  providers: [EmailService],
-  exports: [EmailService],
+  providers: [
+    EmailService,
+    SendConfirmationEmailWhenUserRegisteredEventHandler,
+  ],
+  exports: [],
 })
 export class NotificationsModule {}

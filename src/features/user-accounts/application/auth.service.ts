@@ -29,12 +29,4 @@ export class AuthService {
 
     throw UnauthorizedDomainException.create();
   }
-
-  async login(userId: string) {
-    const accessToken = this.jwtService.sign({ id: userId } as UserContext);
-
-    return {
-      accessToken,
-    };
-  }
 }

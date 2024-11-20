@@ -1,11 +1,11 @@
 import {
   Body,
   Controller,
-  Post,
-  UseGuards,
   Get,
   HttpCode,
   HttpStatus,
+  Post,
+  UseGuards,
 } from '@nestjs/common';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 
@@ -17,10 +17,15 @@ import { JwtAuthGuard } from '../../../core/guards/jwt-auth.guard';
 import { CommandBus } from '@nestjs/cqrs';
 import { CreateUserInputDto } from './input-dto/users.input-dto';
 import { RegisterUserCommand } from '../application/usecases/register-user.usecase';
+import { AuthQueryRepository } from '../infrastructure/query/auth.query-repository';
+import { LoginUserCommand } from '../application/usecases/login-user.usecase';
 
 @Controller('auth')
 export class AuthController {
-  constructor(private commandBus: CommandBus) {}
+  constructor(
+    private commandBus: CommandBus,
+    private authQueryRepository: AuthQueryRepository,
+  ) {}
   @Post('registration')
   registration(@Body() body: CreateUserInputDto) {
     return this.commandBus.execute(new RegisterUserCommand(body));
@@ -43,7 +48,7 @@ export class AuthController {
     /*@Request() req: any*/
     @ExtractUserFromRequest() user: UserContext,
   ): Promise<{ accessToken: string }> {
-    return this.authService.login(user.id);
+    return this.commandBus.execute(new LoginUserCommand({ userId: user.id }));
   }
 
   @ApiBearerAuth()

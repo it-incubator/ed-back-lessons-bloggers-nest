@@ -12,6 +12,7 @@ import configuration, {
   validate,
 } from './config/env/configuration';
 import { Environments } from './config/env/env-settings';
+import { NotificationsModule } from './features/notifications/notifications.module';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { Environments } from './config/env/env-settings';
     TestingModule,
     BloggersPlatformModule,
     CoreModule,
+    NotificationsModule,
     ConfigModule.forRoot({
       isGlobal: true,
       load: [configuration],
