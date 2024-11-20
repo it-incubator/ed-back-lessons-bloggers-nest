@@ -18,7 +18,6 @@ export class UsersService {
   ) {}
 
   async createUser(dto: CreateUserDto): Promise<string> {
-    //TODO: move to bcrypt service
     const passwordHash = await this.cryptoService.createPasswordHash(
       dto.password,
     );
