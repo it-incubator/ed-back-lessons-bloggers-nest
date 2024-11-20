@@ -7,18 +7,20 @@ import {
   HttpStatus,
   Inject,
   Param,
-  ParseIntPipe,
   Post,
   Put,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import { IUserQueryRepository } from '../infrastructure/query/users.query-repository';
 import { UserViewDto } from './view-dto/users.view-dto';
 import { CreateUserInputDto } from './input-dto/users.input-dto';
 import { PaginatedViewDto } from '../../../core/dto/base.paginated.view-dto';
-import { ApiParam } from '@nestjs/swagger';
-import { UpdateUserInputDto } from './input-dto/update-user-input.dto';
-import { GetUsersQueryParams } from './input-dto/get-users-query-params';
+import { ApiBasicAuth, ApiParam } from '@nestjs/swagger';
+import { UpdateUserInputDto } from './input-dto/update-user.input-dto';
+import { GetUsersQueryParams } from './input-dto/get-users-query-params.input-dto';
+import { BasicAuthGuard } from '../../../core/guards/basic-auth.guard';
+import { Types } from 'mongoose';
 
 import { USER_QUERY_REPO_TOKEN } from '../constants/users.inject-tokens';
 import { CommandBus } from '@nestjs/cqrs';
@@ -27,6 +29,8 @@ import { DeleteUserCommand } from '../application/usecases/delete-user.usecase';
 import { UpdateUserCommand } from '../application/usecases/update-user.usecase';
 
 @Controller('users')
+@UseGuards(BasicAuthGuard)
+@ApiBasicAuth('basicAuth')
 export class UsersController {
   constructor(
     //инжектирование через токен
@@ -61,16 +65,17 @@ export class UsersController {
     return this.usersQueryRepository.getByIdOrNotFoundFail(userId);
   }
 
+  @ApiParam({ name: 'id', type: 'string' })
   @Put(':id')
   async updateUser(
-    @Param('id') id: string,
+    @Param('id') id: Types.ObjectId,
     @Body() body: UpdateUserInputDto,
   ): Promise<UserViewDto> {
     await this.commandBus.execute<UpdateUserCommand, void>(
-      new UpdateUserCommand(id, body),
+      new UpdateUserCommand(id.toString(), body),
     );
 
-    return this.usersQueryRepository.getByIdOrNotFoundFail(id);
+    return this.usersQueryRepository.getByIdOrNotFoundFail(id.toString());
   }
 
   @ApiParam({ name: 'id' }) //для сваггера

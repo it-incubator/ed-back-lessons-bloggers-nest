@@ -1,12 +1,11 @@
 import { CreateUserDto } from '../../dto/create-user.dto';
-import { IsEmail, IsString, Length, Matches } from 'class-validator';
+import { IsEmail, IsString, Length } from 'class-validator';
 import { Trim } from '../../../../core/decorators/transform/trim';
 import {
-  emailConstraints,
   loginConstraints,
   passwordConstraints,
 } from '../../domain/user.entity';
-import { IsTrimmedString } from '../../../../core/decorators/validation/is-trimmed-string';
+import { IsStringWithTrim } from '../../../../core/decorators/validation/is-string-with-trim';
 import { LoginIsExist } from '../validation/login-is-exist.decorator';
 
 // Доступные декораторы для валидации
@@ -14,7 +13,7 @@ import { LoginIsExist } from '../validation/login-is-exist.decorator';
 
 //dto для боди при создании юзера. Сюда могут быть добавлены декораторы swagger
 export class CreateUserInputDto implements CreateUserDto {
-  @IsTrimmedString(loginConstraints.minLength, loginConstraints.maxLength)
+  @IsStringWithTrim(loginConstraints.minLength, loginConstraints.maxLength)
   @LoginIsExist()
   login: string;
 
@@ -25,7 +24,7 @@ export class CreateUserInputDto implements CreateUserDto {
 
   @IsString()
   @IsEmail()
-  //@Matches(emailConstraints.match)
+  // @Matches(emailConstraints.match)
   @Trim()
   email: string;
 }
