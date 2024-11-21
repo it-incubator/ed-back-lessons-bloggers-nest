@@ -5,14 +5,13 @@ import {
   Get,
   HttpCode,
   HttpStatus,
-  Inject,
   Param,
   Post,
   Put,
   Query,
   UseGuards,
 } from '@nestjs/common';
-import { IUserQueryRepository } from '../infrastructure/query/users.query-repository';
+import { UsersQueryRepository } from '../infrastructure/query/users.query-repository';
 import { UserViewDto } from './view-dto/users.view-dto';
 import { CreateUserInputDto } from './input-dto/users.input-dto';
 import { PaginatedViewDto } from '../../../core/dto/base.paginated.view-dto';
@@ -22,7 +21,6 @@ import { GetUsersQueryParams } from './input-dto/get-users-query-params.input-dt
 import { BasicAuthGuard } from '../../../core/guards/basic-auth.guard';
 import { Types } from 'mongoose';
 
-import { USER_QUERY_REPO_TOKEN } from '../constants/users.inject-tokens';
 import { CommandBus } from '@nestjs/cqrs';
 import { CreateUserCommand } from '../application/usecases/create-user.usecase';
 import { DeleteUserCommand } from '../application/usecases/delete-user.usecase';
@@ -33,12 +31,7 @@ import { UpdateUserCommand } from '../application/usecases/update-user.usecase';
 @ApiBasicAuth('basicAuth')
 export class UsersController {
   constructor(
-    //инжектирование через токен
-    @Inject(USER_QUERY_REPO_TOKEN)
-    private usersQueryRepository: IUserQueryRepository<
-      UserViewDto,
-      GetUsersQueryParams
-    >,
+    private usersQueryRepository: UsersQueryRepository,
     //private usersService: UsersService,
     private readonly commandBus: CommandBus,
   ) {}
