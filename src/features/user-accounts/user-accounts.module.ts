@@ -30,13 +30,7 @@ import { UserContext } from '../../core/dto/user-context';
 
 @Module({
   imports: [
-    //если в системе несколько токенов (например, access и refresh) с разными опциями (время жизни, секрет)
-    //можно переопределить опции при вызове метода jwt.service.sign
-    //или написать свой tokens сервис (адаптер), где эти опции будут уже учтены
-    JwtModule.register({
-      secret: 'secret_key', // секретный ключ (должен браться из env)
-      signOptions: { expiresIn: '60m' }, // Время жизни токена
-    }),
+    JwtModule,
     MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
   ],
   controllers: [UsersController, AuthController, SecurityDevicesController],
