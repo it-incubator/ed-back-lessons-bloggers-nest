@@ -45,8 +45,9 @@ import { UserContext } from '../../core/dto/user-context';
       useFactory: (
         userRepository: UsersRepository,
         UserModel: UserModelType,
+        cryptoService: CryptoService,
       ) => {
-        return new CreateUserUseCase(UserModel, userRepository);
+        return new CreateUserUseCase(UserModel, userRepository, cryptoService);
       },
       inject: [UsersRepository, getModelToken(User.name)],
     },
