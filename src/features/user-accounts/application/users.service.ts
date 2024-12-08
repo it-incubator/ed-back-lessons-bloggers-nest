@@ -1,10 +1,9 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { User, UserModelType } from '../domain/user.entity';
 import { CreateUserDto, UpdateUserDto } from '../dto/create-user.dto';
 import bcrypt from 'bcrypt';
 import { UsersRepository } from '../infrastructure/users.repository';
-import { NotFoundError } from 'rxjs';
 
 @Injectable()
 export class UsersService {
@@ -32,7 +31,9 @@ export class UsersService {
   async updateUser(id: string, dto: UpdateUserDto): Promise<string> {
     const user = await this.usersRepository.findOrNotFoundFail(id);
 
-    user.update(dto);
+    console.log('user.id: ' + user.id);
+
+    user.update(dto); // change detection
 
     await this.usersRepository.save(user);
 
