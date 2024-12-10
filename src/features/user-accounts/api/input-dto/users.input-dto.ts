@@ -1,4 +1,3 @@
-import { CreateUserDto } from '../../dto/create-user.dto';
 import { IsEmail, IsString, Length } from 'class-validator';
 import { Trim } from '../../../../core/decorators/transform/trim';
 import {
@@ -12,7 +11,7 @@ import { LoginIsExist } from '../validation/login-is-exist.decorator';
 // https://github.com/typestack/class-validator?tab=readme-ov-file#validation-decorators
 
 //dto для боди при создании юзера. Сюда могут быть добавлены декораторы swagger
-export class CreateUserInputDto implements CreateUserDto {
+export class CreateUserInputDto {
   @IsStringWithTrim(loginConstraints.minLength, loginConstraints.maxLength)
   @LoginIsExist()
   login: string;

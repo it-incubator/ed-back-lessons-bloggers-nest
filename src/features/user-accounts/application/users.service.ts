@@ -35,7 +35,7 @@ export class UsersService {
   async updateUser(id: string, dto: UpdateUserDto): Promise<string> {
     const user = await this.usersRepository.findOrNotFoundFail(id);
 
-    user.update(dto);
+    user.update(dto); // change detection
 
     await this.usersRepository.save(user);
 
