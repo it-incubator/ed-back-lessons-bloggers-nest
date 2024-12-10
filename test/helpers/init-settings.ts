@@ -2,7 +2,7 @@ import { getConnectionToken } from '@nestjs/mongoose';
 import { Test, TestingModuleBuilder } from '@nestjs/testing';
 import { Connection } from 'mongoose';
 import { AppModule } from '../../src/app.module';
-import { configApp } from '../../src/config/config-app';
+import { appSetup } from '../../src/config/app.setup';
 import { UsersTestManager } from './users-test-manager';
 import { deleteAllData } from './delete-all-data';
 import { EmailService } from '../../src/features/notifications/email.service';
@@ -27,7 +27,7 @@ export const initSettings = async (
 
   const app = testingAppModule.createNestApplication();
 
-  configApp(app);
+  appSetup(app);
 
   await app.init();
 
