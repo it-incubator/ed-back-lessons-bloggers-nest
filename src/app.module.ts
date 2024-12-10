@@ -12,8 +12,8 @@ import configuration, {
   validate,
 } from './config/env/configuration';
 import { Environments } from './config/env/env-settings';
+import { NotificationsModule } from './features/notifications/notifications.module';
 import { CounterModule } from './features/scoped-logger-example/counter.module';
-import * as process from 'node:process';
 
 @Module({
   imports: [
@@ -37,6 +37,7 @@ import * as process from 'node:process';
     TestingModule.register(process.env.ENV as string),
     BloggersPlatformModule,
     CoreModule,
+    NotificationsModule,
     ConfigModule.forRoot({
       isGlobal: true,
       load: [configuration],

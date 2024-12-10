@@ -9,14 +9,28 @@ import { SecurityDevicesQueryRepository } from './infrastructure/query/security-
 import { AuthQueryRepository } from './infrastructure/query/auth.query-repository';
 import { SecurityDevicesController } from './api/security-devices.controller';
 import { LoginIsExistConstraint } from './api/validation/login-is-exist.decorator';
-import { USER_QUERY_REPO_TOKEN } from './constants/users.inject-tokens';
+import { AuthService } from './application/auth.service';
+import { LocalStrategy } from './api/guards/local.strategy';
+import { JwtModule, JwtService } from '@nestjs/jwt';
+import { CryptoService } from './application/crypto.service';
+import {
+  ACCESS_TOKEN_STRATEGY_INJECT_TOKEN,
+  FRIEND_TOKEN_STRATEGY_INJECT_TOKEN,
+  REFRESH_TOKEN_STRATEGY_INJECT_TOKEN,
+} from './constants/auth-tokens.inject-constants';
 import { CreateUserUseCase } from './application/usecases/create-user.usecase';
 import { DeleteUserUseCase } from './application/usecases/delete-user.usecase';
-import { SendConfirmationEmailWhenUserCreatedEventHandler } from './application/event-handlers/send-confirmation-email-when-user-created.event-handler';
 import { RegisterUserUseCase } from './application/usecases/register-user.usecase';
+import { AuthAccessTokenStrategy } from './application/auth-token-strategies/auth-access-token.strategy';
+import { AuthRefreshTokenStrategy } from './application/auth-token-strategies/auth-refresh-token.strategy';
+import { AuthFriendTokenStrategy } from './application/auth-token-strategies/auth-friend-token.strategy';
+import { LoginUserUseCase } from './application/usecases/login-user.usecase';
+import { AuthTokenContext } from './application/auth-token-strategies/auth-token.context';
+import { UserContext } from '../../core/dto/user-context';
 
 @Module({
   imports: [
+    JwtModule,
     MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
   ],
   controllers: [UsersController, AuthController, SecurityDevicesController],
@@ -24,26 +38,49 @@ import { RegisterUserUseCase } from './application/usecases/register-user.usecas
     //варианты регистрации провайдеров
     UsersRepository,
     DeleteUserUseCase,
-    SendConfirmationEmailWhenUserCreatedEventHandler,
     RegisterUserUseCase,
     {
       provide: CreateUserUseCase,
+      //вмешиваемся в процесс и вручную инстанцируем класс
       useFactory: (
         userRepository: UsersRepository,
         UserModel: UserModelType,
+        cryptoService: CryptoService,
       ) => {
-        return new CreateUserUseCase(UserModel, userRepository);
+        return new CreateUserUseCase(UserModel, userRepository, cryptoService);
       },
       inject: [UsersRepository, getModelToken(User.name)],
     },
+    //пример инстанцирования через токен
+    //если надо внедрить несколько раз один и тот же класс
     {
-      provide: USER_QUERY_REPO_TOKEN,
-      useClass: UsersQueryRepository,
-      //useValue: {},
+      provide: ACCESS_TOKEN_STRATEGY_INJECT_TOKEN,
+      useFactory: (jwtService: JwtService): AuthTokenContext<UserContext> => {
+        return new AuthTokenContext(new AuthAccessTokenStrategy(jwtService));
+      },
+      inject: [JwtService],
     },
+    {
+      provide: REFRESH_TOKEN_STRATEGY_INJECT_TOKEN,
+      useFactory: (
+        jwtService: JwtService,
+      ): AuthTokenContext<UserContext & { deviceId: string }> => {
+        return new AuthTokenContext(new AuthRefreshTokenStrategy(jwtService));
+      },
+      inject: [JwtService],
+    },
+    {
+      provide: FRIEND_TOKEN_STRATEGY_INJECT_TOKEN,
+      useValue: new AuthTokenContext(new AuthFriendTokenStrategy()),
+    },
+    UsersQueryRepository,
     SecurityDevicesQueryRepository,
     AuthQueryRepository,
     LoginIsExistConstraint,
+    AuthService,
+    LocalStrategy,
+    CryptoService,
+    LoginUserUseCase,
   ],
   exports: [UsersRepository, MongooseModule],
 })

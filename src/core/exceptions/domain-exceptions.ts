@@ -19,7 +19,7 @@ export class DomainException extends Error {
 
 //используем typescript mixin для создания классов с одинаковым статическим методом create
 //https://www.typescriptlang.org/docs/handbook/mixins.html
-function ConcreteDomainExceptionMixin(
+function ConcreteDomainExceptionFactory(
   commonMessage: string,
   code: DomainExceptionCode,
 ) {
@@ -34,19 +34,19 @@ function ConcreteDomainExceptionMixin(
   };
 }
 
-export const NotFoundDomainException = ConcreteDomainExceptionMixin(
+export const NotFoundDomainException = ConcreteDomainExceptionFactory(
   'Not Found',
   DomainExceptionCode.NotFound,
 );
-export const BadRequestDomainException = ConcreteDomainExceptionMixin(
+export const BadRequestDomainException = ConcreteDomainExceptionFactory(
   'Bed Request',
-  DomainExceptionCode.BedRequest,
+  DomainExceptionCode.BadRequest,
 );
-export const ForbiddenDomainException = ConcreteDomainExceptionMixin(
+export const ForbiddenDomainException = ConcreteDomainExceptionFactory(
   'Forbidden',
   DomainExceptionCode.Forbidden,
 );
-export const UnauthorizedDomainException = ConcreteDomainExceptionMixin(
+export const UnauthorizedDomainException = ConcreteDomainExceptionFactory(
   'Unauthorized',
   DomainExceptionCode.Unauthorized,
 );

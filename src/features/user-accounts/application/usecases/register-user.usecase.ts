@@ -6,7 +6,7 @@ import {
 } from '@nestjs/cqrs';
 import { CreateUserDto } from '../../dto/create-user.dto';
 import { CreateUserCommand } from './create-user.usecase';
-import { UserCreatedEvent } from '../../domain/events/user-created.event';
+import { UserRegisteredEvent } from '../../domain/events/user-registered.event';
 import { UsersRepository } from '../../infrastructure/users.repository';
 
 export class RegisterUserCommand {
@@ -36,6 +36,6 @@ export class RegisterUserUseCase
     user.setConfirmationCode(confirmCode);
     await this.usersRepository.save(user);
 
-    this.eventBus.publish(new UserCreatedEvent(user.email));
+    this.eventBus.publish(new UserRegisteredEvent(user.email, confirmCode));
   }
 }
