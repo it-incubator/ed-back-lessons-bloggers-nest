@@ -1,12 +1,13 @@
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { configApp } from './config/config-app';
+import { appSetup } from './config/app.setup';
 import { ConfigService } from '@nestjs/config';
 import { ConfigurationType } from './config/env/configuration';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  configApp(app); //глобальные настройки приложения
+
+  appSetup(app); //глобальные настройки приложения
 
   const configService = app.get(ConfigService<ConfigurationType, true>);
   const apiSettings = configService.get('apiSettings', { infer: true });

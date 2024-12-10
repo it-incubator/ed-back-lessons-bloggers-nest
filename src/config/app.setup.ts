@@ -5,7 +5,7 @@ import { swaggerSetup } from './swagger.setup';
 import { validationConstraintSetup } from './validation-constraint.setup';
 import { exceptionFilterSetup } from './exception-filter.setup';
 
-export function configApp(app: INestApplication) {
+export function appSetup(app: INestApplication) {
   pipesSetup(app);
   globalPrefixSetup(app);
   swaggerSetup(app);
