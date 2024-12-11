@@ -49,7 +49,7 @@ import { UserContext } from '../../core/dto/user-context';
       ) => {
         return new CreateUserUseCase(UserModel, userRepository, cryptoService);
       },
-      inject: [UsersRepository, getModelToken(User.name)],
+      inject: [UsersRepository, getModelToken(User.name), CryptoService],
     },
     //пример инстанцирования через токен
     //если надо внедрить несколько раз один и тот же класс

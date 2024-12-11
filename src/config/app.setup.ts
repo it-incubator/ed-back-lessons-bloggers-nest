@@ -4,11 +4,12 @@ import { globalPrefixSetup } from './global-prefix.setup';
 import { swaggerSetup } from './swagger.setup';
 import { validationConstraintSetup } from './validation-constraint.setup';
 import { exceptionFilterSetup } from './exception-filter.setup';
+import { CoreConfig } from '../core/core.config';
 
-export function appSetup(app: INestApplication) {
+export async function appSetup(app: INestApplication, coreConfig: CoreConfig) {
   pipesSetup(app);
   globalPrefixSetup(app);
-  swaggerSetup(app);
-  validationConstraintSetup(app);
+  swaggerSetup(app, coreConfig);
+  await validationConstraintSetup(app, coreConfig);
   exceptionFilterSetup(app);
 }

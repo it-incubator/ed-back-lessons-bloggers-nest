@@ -1,4 +1,6 @@
-import { Module } from '@nestjs/common';
+// import of this config module must be on the top of imports
+import { configModule } from './config-dynamic-module';
+import { DynamicModule, Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UserAccountsModule } from './features/user-accounts/user-accounts.module';
@@ -6,55 +8,44 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { TestingModule } from './features/testing/testing.module';
 import { BloggersPlatformModule } from './features/bloggers-platform/bloggers-platform.module';
 import { CoreModule } from './core/core.module';
-import { ConfigModule, ConfigService } from '@nestjs/config';
-import configuration, {
-  ConfigurationType,
-  validate,
-} from './config/env/configuration';
-import { Environments } from './config/env/env-settings';
 import { NotificationsModule } from './features/notifications/notifications.module';
+import { CoreConfig } from './core/core.config';
 
 @Module({
   imports: [
     MongooseModule.forRootAsync({
-      useFactory: (configService: ConfigService<ConfigurationType, true>) => {
-        const databaseSettings = configService.get('databaseSettings', {
-          infer: true,
-        });
-
-        const uri = databaseSettings.DB_URL;
+      useFactory: (coreConfig: CoreConfig) => {
+        const uri = coreConfig.mongoURI;
         console.log('DB_URI', uri);
 
         return {
           uri: uri,
         };
       },
-      inject: [ConfigService],
+      inject: [CoreConfig],
     }),
     UserAccountsModule, //все модули должны быть заимпортированы в корневой модуль, либо напрямую, либо по цепочке (через другие модули)
-    TestingModule,
     BloggersPlatformModule,
     CoreModule,
     NotificationsModule,
-    ConfigModule.forRoot({
-      isGlobal: true,
-      load: [configuration],
-      validate: validate,
-      //игнорируем файлы конфигурации в production и staging
-      ignoreEnvFile:
-        process.env.ENV !== Environments.DEVELOPMENT &&
-        process.env.ENV !== Environments.TEST,
-      //указывает откуда брать конфигурации (приоритет справа налево)
-      //.env.testing самый приоритетный в тестовой среде
-      envFilePath: [
-        process.env.ENV === Environments.TEST ? '.env.testing' : '',
-        '.env.development.local',
-        '.env.development',
-        '.env',
-      ],
-    }),
+    configModule,
   ],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule {
+  static async forRoot(coreConfig: CoreConfig): Promise<DynamicModule> {
+    // такой мудрёный способ мы используем, чтобы добавить к основным модулям необязательный модуль.
+    // чтобы не обращаться в декораторе к переменной окружения через process.env в декораторе, потому что
+    // запуск декораторов происходит на этапе склейки всех модулей до старта жизненного цикла самого NestJS
+    const testingModule: any[] = [];
+    if (coreConfig.includeTestingModule) {
+      testingModule.push(TestingModule);
+    }
+
+    return {
+      module: AppModule,
+      imports: testingModule, // Add dynamic modules here
+    };
+  }
+}

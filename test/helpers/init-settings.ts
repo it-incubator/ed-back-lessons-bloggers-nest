@@ -1,19 +1,21 @@
 import { getConnectionToken } from '@nestjs/mongoose';
 import { Test, TestingModuleBuilder } from '@nestjs/testing';
 import { Connection } from 'mongoose';
-import { AppModule } from '../../src/app.module';
-import { configApp } from '../../src/config/config-app';
 import { UsersTestManager } from './users-test-manager';
 import { deleteAllData } from './delete-all-data';
 import { EmailService } from '../../src/features/notifications/email.service';
 import { EmailServiceMock } from '../mock/email-service.mock';
+import { appSetup } from '../../src/config/app.setup';
+import { CoreConfig } from '../../src/core/core.config';
+import { initAppModule } from '../../src/init-app-module';
 
 export const initSettings = async (
   //передаем callback, который получает ModuleBuilder, если хотим изменить настройку тестового модуля
   addSettingsToModuleBuilder?: (moduleBuilder: TestingModuleBuilder) => void,
 ) => {
+  const dynamicAppModule = await initAppModule();
   const testingModuleBuilder: TestingModuleBuilder = Test.createTestingModule({
-    imports: [AppModule],
+    imports: [dynamicAppModule],
   })
 
     .overrideProvider(EmailService)
@@ -26,8 +28,8 @@ export const initSettings = async (
   const testingAppModule = await testingModuleBuilder.compile();
 
   const app = testingAppModule.createNestApplication();
-
-  configApp(app);
+  const coreConfig = app.get<CoreConfig>(CoreConfig);
+  await appSetup(app, coreConfig);
 
   await app.init();
 

@@ -8,7 +8,7 @@ export class AuthAccessTokenStrategy implements ITokenStrategy<UserContext> {
     return this.jwtService.sign(
       { id: payload.id },
       //TODO: from config service
-      { expiresIn: '10m', secret: 'secret_key' },
+      { expiresIn: '1s', secret: 'secret_key' },
     );
   }
 }

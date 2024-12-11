@@ -1,24 +1,22 @@
 import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
 import { appSetup } from './config/app.setup';
-import { ConfigService } from '@nestjs/config';
-import { ConfigurationType } from './config/env/configuration';
+import { CoreConfig } from './core/core.config';
+import { initAppModule } from './init-app-module';
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
+  // создаём на основе донастроенного модуля наше приложение
+  const dynamicAppModule = await initAppModule();
+  const app = await NestFactory.create(dynamicAppModule);
 
-  appSetup(app); //глобальные настройки приложения
+  const coreConfig = app.get<CoreConfig>(CoreConfig);
 
-  const configService = app.get(ConfigService<ConfigurationType, true>);
-  const apiSettings = configService.get('apiSettings', { infer: true });
-  const environmentSettings = configService.get('environmentSettings', {
-    infer: true,
-  });
-  const port = apiSettings.PORT;
+  await appSetup(app, coreConfig); //глобальные настройки приложения
+
+  const port = coreConfig.port;
 
   await app.listen(port, () => {
     console.log('App starting listen port: ', port);
-    console.log('ENV: ', environmentSettings.currentEnv);
+    console.log('NODE_ENV: ', coreConfig.env);
   });
 }
 bootstrap();
