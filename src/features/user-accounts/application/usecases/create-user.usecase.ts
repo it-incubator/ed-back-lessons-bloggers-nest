@@ -21,8 +21,6 @@ export class CreateUserUseCase
   ) {}
 
   async execute({ dto }: CreateUserCommand): Promise<string> {
-    console.log('this.cryptoService', this.cryptoService);
-    console.log('usersRepository', this.usersRepository);
     const passwordHash = await this.cryptoService.createPasswordHash(
       dto.password,
     );

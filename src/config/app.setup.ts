@@ -11,5 +11,5 @@ export async function appSetup(app: INestApplication, coreConfig: CoreConfig) {
   globalPrefixSetup(app);
   swaggerSetup(app, coreConfig);
   await validationConstraintSetup(app, coreConfig);
-  exceptionFilterSetup(app);
+  exceptionFilterSetup(app, coreConfig);
 }

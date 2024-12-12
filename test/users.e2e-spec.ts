@@ -13,6 +13,8 @@ import { GLOBAL_PREFIX } from '../src/config/global-prefix.setup';
 import { JwtService } from '@nestjs/jwt';
 import { delay } from './helpers/delay';
 import { EmailService } from '../src/features/notifications/email.service';
+import { ACCESS_TOKEN_STRATEGY_INJECT_TOKEN } from '../src/features/user-accounts/constants/auth-tokens.inject-constants';
+import { CoreConfig } from '../src/core/core.config';
 
 describe('users', () => {
   let app: INestApplication;
@@ -20,12 +22,17 @@ describe('users', () => {
 
   beforeAll(async () => {
     const result = await initSettings((moduleBuilder) =>
-      moduleBuilder.overrideProvider(JwtService).useValue(
-        new JwtService({
-          secret: 'secret_key',
-          signOptions: { expiresIn: '2s' },
+      moduleBuilder
+        .overrideProvider(ACCESS_TOKEN_STRATEGY_INJECT_TOKEN)
+        .useFactory({
+          factory: (coreConfig: CoreConfig) => {
+            return new JwtService({
+              secret: coreConfig.accessTokenSecret,
+              signOptions: { expiresIn: '2s' },
+            });
+          },
+          inject: [CoreConfig],
         }),
-      ),
     );
     app = result.app;
     userTestManger = result.userTestManger;

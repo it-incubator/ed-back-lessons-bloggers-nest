@@ -15,18 +15,14 @@ import { JwtModule, JwtService } from '@nestjs/jwt';
 import { CryptoService } from './application/crypto.service';
 import {
   ACCESS_TOKEN_STRATEGY_INJECT_TOKEN,
-  FRIEND_TOKEN_STRATEGY_INJECT_TOKEN,
   REFRESH_TOKEN_STRATEGY_INJECT_TOKEN,
 } from './constants/auth-tokens.inject-constants';
 import { CreateUserUseCase } from './application/usecases/create-user.usecase';
 import { DeleteUserUseCase } from './application/usecases/delete-user.usecase';
 import { RegisterUserUseCase } from './application/usecases/register-user.usecase';
-import { AuthAccessTokenStrategy } from './application/auth-token-strategies/auth-access-token.strategy';
-import { AuthRefreshTokenStrategy } from './application/auth-token-strategies/auth-refresh-token.strategy';
-import { AuthFriendTokenStrategy } from './application/auth-token-strategies/auth-friend-token.strategy';
 import { LoginUserUseCase } from './application/usecases/login-user.usecase';
-import { AuthTokenContext } from './application/auth-token-strategies/auth-token.context';
-import { UserContext } from '../../core/dto/user-context';
+import { CoreConfig } from '../../core/core.config';
+import { UserAccountConfig } from './config/user-account.config';
 
 @Module({
   imports: [
@@ -55,23 +51,29 @@ import { UserContext } from '../../core/dto/user-context';
     //если надо внедрить несколько раз один и тот же класс
     {
       provide: ACCESS_TOKEN_STRATEGY_INJECT_TOKEN,
-      useFactory: (jwtService: JwtService): AuthTokenContext<UserContext> => {
-        return new AuthTokenContext(new AuthAccessTokenStrategy(jwtService));
+      useFactory: (
+        coreConfig: CoreConfig,
+        userAccountConfig: UserAccountConfig,
+      ): JwtService => {
+        return new JwtService({
+          secret: coreConfig.accessTokenSecret,
+          signOptions: { expiresIn: userAccountConfig.accessTokenExpireIn },
+        });
       },
-      inject: [JwtService],
+      inject: [CoreConfig, UserAccountConfig],
     },
     {
       provide: REFRESH_TOKEN_STRATEGY_INJECT_TOKEN,
       useFactory: (
-        jwtService: JwtService,
-      ): AuthTokenContext<UserContext & { deviceId: string }> => {
-        return new AuthTokenContext(new AuthRefreshTokenStrategy(jwtService));
+        coreConfig: CoreConfig,
+        userAccountConfig: UserAccountConfig,
+      ): JwtService => {
+        return new JwtService({
+          secret: coreConfig.refreshTokenSecret,
+          signOptions: { expiresIn: userAccountConfig.refreshTokenExpireIn },
+        });
       },
-      inject: [JwtService],
-    },
-    {
-      provide: FRIEND_TOKEN_STRATEGY_INJECT_TOKEN,
-      useValue: new AuthTokenContext(new AuthFriendTokenStrategy()),
+      inject: [CoreConfig, UserAccountConfig],
     },
     UsersQueryRepository,
     SecurityDevicesQueryRepository,
@@ -81,6 +83,7 @@ import { UserContext } from '../../core/dto/user-context';
     LocalStrategy,
     CryptoService,
     LoginUserUseCase,
+    UserAccountConfig,
   ],
   exports: [UsersRepository, MongooseModule],
 })

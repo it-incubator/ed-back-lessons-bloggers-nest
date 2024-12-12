@@ -6,10 +6,18 @@ import { configValidationUtility } from '../../../config/config-validation.utili
 @Injectable()
 export class UserAccountConfig {
   @IsNotEmpty({
-    message:
-      'Set Env variable PAYMENT_PAYPAL_SECRET, you can take it in Paypal Shop Control Panel',
+    message: 'Set Env variable ACCESS_TOKEN_EXPIRE_IN, examples: 1h, 5m, 2d',
   })
-  paypalSecret: string = this.configService.get('PAYMENT_PAYPAL_SECRET');
+  accessTokenExpireIn: string = this.configService.get(
+    'ACCESS_TOKEN_EXPIRE_IN',
+  );
+
+  @IsNotEmpty({
+    message: 'Set Env variable REFRESH_TOKEN_EXPIRE_IN, examples: 1h, 5m, 2d',
+  })
+  refreshTokenExpireIn: string = this.configService.get(
+    'REFRESH_TOKEN_EXPIRE_IN',
+  );
 
   constructor(private configService: ConfigService<any, true>) {
     configValidationUtility.validateConfig(this);
