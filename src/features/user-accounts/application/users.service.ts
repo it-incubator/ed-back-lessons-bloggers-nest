@@ -5,6 +5,11 @@ import { CreateUserDto, UpdateUserDto } from '../dto/create-user.dto';
 import { UsersRepository } from '../infrastructure/users.repository';
 import { EmailService } from '../../notifications/email.service';
 import { CryptoService } from './crypto.service';
+import { Types } from 'mongoose';
+import {
+  BadRequestDomainException,
+  NotFoundDomainException,
+} from '../../../core/exceptions/domain-exceptions';
 
 @Injectable()
 export class UsersService {
@@ -18,6 +23,15 @@ export class UsersService {
   ) {}
 
   async createUser(dto: CreateUserDto): Promise<string> {
+    const userWithTheSameLogin = await this.usersRepository.findByLogin(
+      dto.login,
+    );
+    if (!!userWithTheSameLogin) {
+      throw BadRequestDomainException.create(
+        'User with the same login already exists',
+      );
+    }
+
     const passwordHash = await this.cryptoService.createPasswordHash(
       dto.password,
     );
@@ -32,7 +46,7 @@ export class UsersService {
 
     return user._id.toString();
   }
-  async updateUser(id: string, dto: UpdateUserDto): Promise<string> {
+  async updateUser(id: Types.ObjectId, dto: UpdateUserDto): Promise<string> {
     const user = await this.usersRepository.findOrNotFoundFail(id);
 
     user.update(dto); // change detection
@@ -43,7 +57,9 @@ export class UsersService {
   }
 
   async deleteUser(id: string) {
-    const user = await this.usersRepository.findOrNotFoundFail(id);
+    const user = await this.usersRepository.findOrNotFoundFail(
+      new Types.ObjectId(id),
+    );
 
     user.makeDeleted();
 
@@ -55,7 +71,9 @@ export class UsersService {
 
     const confirmCode = 'uuid';
 
-    const user = await this.usersRepository.findOrNotFoundFail(createdUserId);
+    const user = await this.usersRepository.findOrNotFoundFail(
+      new Types.ObjectId(createdUserId),
+    );
 
     user.setConfirmationCode(confirmCode);
     await this.usersRepository.save(user);

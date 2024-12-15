@@ -5,7 +5,7 @@ import {
   MeViewDto,
   UserViewDto,
 } from '../../src/features/user-accounts/api/view-dto/users.view-dto';
-import { GLOBAL_PREFIX } from '../../src/config/global-prefix.setup';
+import { GLOBAL_PREFIX } from '../../src/setup/global-prefix.setup';
 import { delay } from './delay';
 import { UpdateUserInputDto } from '../../src/features/user-accounts/api/input-dto/update-user.input-dto';
 

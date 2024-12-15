@@ -1,6 +1,7 @@
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
-import { HydratedDocument, Model } from 'mongoose';
+import { HydratedDocument, Model, Types } from 'mongoose';
 import { CreateUserDto, UpdateUserDto } from '../dto/create-user.dto';
+import { Name, NameSchema } from './name.schema';
 
 export enum DeletionStatus {
   NotDeleted = 'not-deleted',
@@ -33,9 +34,16 @@ export class User {
    * @type {string}
    * @required
    */
-  @Prop({ type: String, required: true })
-  @Prop({ type: String, required: true, ...loginConstraints })
+  @Prop({
+    type: String,
+    required: true,
+    unique: true,
+    ...loginConstraints,
+  })
   login: string;
+
+  @Prop(NameSchema)
+  name: Name;
 
   /**
    * Password hash for authentication
@@ -103,8 +111,12 @@ export class User {
     user.email = dto.email;
     user.passwordHash = dto.password;
     user.login = dto.login;
+    user.name = {
+      firstName: 'firstName xxx',
+      lastName: 'lastName yyy',
+    };
 
-    return user as UserDocument;
+    return user as any;
   }
 
   /**

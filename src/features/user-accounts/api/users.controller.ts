@@ -21,6 +21,8 @@ import { UpdateUserInputDto } from './input-dto/update-user.input-dto';
 import { GetUsersQueryParams } from './input-dto/get-users-query-params.input-dto';
 import { BasicAuthGuard } from '../../../core/guards/basic-auth.guard';
 import { Types } from 'mongoose';
+import { ObjectIdValidationPipe } from '../../../core/pipes/object-id-validation-transformation-pipe.service';
+import { IdInputDTO } from './input-dto/users-sort-by';
 
 @Controller('users')
 @UseGuards(BasicAuthGuard)
@@ -33,7 +35,9 @@ export class UsersController {
 
   @ApiParam({ name: 'id' }) //для сваггера
   @Get(':id')
-  async getById(@Param('id') id: string): Promise<UserViewDto> {
+  async getById(
+    @Param('id', ObjectIdValidationPipe) id: string,
+  ): Promise<UserViewDto> {
     return this.usersQueryRepository.getByIdOrNotFoundFail(id);
   }
 
@@ -57,7 +61,7 @@ export class UsersController {
     @Param('id') id: Types.ObjectId,
     @Body() body: UpdateUserInputDto,
   ): Promise<UserViewDto> {
-    const userId = await this.usersService.updateUser(id.toString(), body);
+    const userId = await this.usersService.updateUser(id, body);
 
     return this.usersQueryRepository.getByIdOrNotFoundFail(userId);
   }
@@ -67,7 +71,9 @@ export class UsersController {
   @HttpCode(HttpStatus.NO_CONTENT)
   //ParseIntPipe может использоваться для трансформации строки в число, если id: number.
   // Можно так же использовать класс dto по аналогии с query и body
-  async deleteUser(@Param('id' /*,ParseIntPipe*/) id: string): Promise<void> {
-    return this.usersService.deleteUser(id);
+  async deleteUser(@Param() id: IdInputDTO): Promise<void> {
+    console.log(id);
+    return;
+    //this.usersService.deleteUser(id.id);
   }
 }

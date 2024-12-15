@@ -9,7 +9,7 @@ import {
   MeViewDto,
   UserViewDto,
 } from '../src/features/user-accounts/api/view-dto/users.view-dto';
-import { GLOBAL_PREFIX } from '../src/config/global-prefix.setup';
+import { GLOBAL_PREFIX } from '../src/setup/global-prefix.setup';
 import { JwtService } from '@nestjs/jwt';
 import { delay } from './helpers/delay';
 import { EmailService } from '../src/features/notifications/email.service';
