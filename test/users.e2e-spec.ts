@@ -60,6 +60,8 @@ describe('users', () => {
       email: body.email,
       id: expect.any(String),
       createdAt: expect.any(String),
+      firstName: expect.any(String),
+      lastName: expect.any(String),
     });
   });
 

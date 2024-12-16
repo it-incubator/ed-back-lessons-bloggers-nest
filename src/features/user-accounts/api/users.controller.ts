@@ -34,7 +34,6 @@ import { UpdateUserCommand } from '../application/usecases/update-user.usecase';
 export class UsersController {
   constructor(
     private usersQueryRepository: UsersQueryRepository,
-    //private usersService: UsersService,
     private readonly commandBus: CommandBus,
   ) {}
 
@@ -78,9 +77,7 @@ export class UsersController {
   @ApiParam({ name: 'id' }) //для сваггера
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  //ParseIntPipe может использоваться для трансформации строки в число, если id: number.
-  // Можно так же использовать класс dto по аналогии с query и body
-  async deleteUser(@Param() id: IdInputDTO): Promise<void> {
-    return this.commandBus.execute(new DeleteUserCommand(id.id));
+  async deleteUser(@Param() dto: IdInputDTO): Promise<void> {
+    return this.commandBus.execute(new DeleteUserCommand(dto.id.toString()));
   }
 }
