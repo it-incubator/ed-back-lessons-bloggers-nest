@@ -42,7 +42,8 @@ export class User {
   })
   login: string;
 
-  @Prop(NameSchema)
+  // @Prop(NameSchema) this variant from docdoesn't make validation for inner object
+  @Prop({ type: NameSchema })
   name: Name;
 
   /**
@@ -113,7 +114,7 @@ export class User {
     user.login = dto.login;
     user.name = {
       firstName: 'firstName xxx',
-      lastName: 'lastName yyy',
+      lastName: null, //'lastName yyy',
     };
 
     return user as any;
@@ -153,6 +154,9 @@ export const UserSchema = SchemaFactory.createForClass(User);
 //регистрирует методы сущности в схеме
 UserSchema.loadClass(User);
 
+// export type UserDocumentOverride = {
+//   name: Types.Subdocument<Name>;
+// };
 //Типизация документа
 export type UserDocument = HydratedDocument<User>;
 

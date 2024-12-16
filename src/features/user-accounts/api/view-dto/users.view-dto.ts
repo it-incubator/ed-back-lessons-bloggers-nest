@@ -5,7 +5,7 @@ export class UserViewDto {
   id: string;
   login: string;
   firstName: string;
-  lastName: string;
+  lastName: string | null;
   email: string;
   createdAt: Date;
 

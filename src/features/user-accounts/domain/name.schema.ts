@@ -4,11 +4,11 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
   _id: false,
 })
 export class Name {
-  @Prop()
+  @Prop({ required: true })
   firstName: string;
 
-  @Prop()
-  lastName: string;
+  @Prop({ type: String, required: false, default: null })
+  lastName: string | null;
 }
 
 export const NameSchema = SchemaFactory.createForClass(Name);
