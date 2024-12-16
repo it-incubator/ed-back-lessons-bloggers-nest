@@ -4,6 +4,8 @@ import { OmitType } from '@nestjs/swagger';
 export class UserViewDto {
   id: string;
   login: string;
+  firstName: string;
+  lastName: string;
   email: string;
   createdAt: Date;
 
@@ -14,6 +16,8 @@ export class UserViewDto {
     dto.login = user.login;
     dto.id = user._id.toString();
     dto.createdAt = user.createdAt;
+    dto.firstName = user.name.firstName;
+    dto.lastName = user.name.lastName;
 
     return dto;
   }

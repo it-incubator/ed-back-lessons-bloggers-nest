@@ -2,7 +2,7 @@ import { INestApplication, ValidationPipe } from '@nestjs/common';
 
 import { ValidationError } from '@nestjs/common';
 import { BadRequestDomainException } from '../core/exceptions/domain-exceptions';
-import { ObjectIdValidationPipe } from '../core/pipes/object-id-validation.pipe';
+import { ObjectIdValidationTransformationPipe } from '../core/pipes/object-id-validation-transformation-pipe.service';
 
 type ErrorResponse = { message: string; key: string };
 
@@ -38,7 +38,7 @@ export const errorFormatter = (
 export function pipesSetup(app: INestApplication) {
   //Глобальный пайп для валидации и трансформации входящих данных.
   app.useGlobalPipes(
-    new ObjectIdValidationPipe(),
+    new ObjectIdValidationTransformationPipe(),
     new ValidationPipe({
       //class-transformer создает экземпляр dto
       //соответственно применятся значения по-умолчанию
