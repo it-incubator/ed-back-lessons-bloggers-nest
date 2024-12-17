@@ -20,9 +20,6 @@ import { UpdateUserInputDto } from './input-dto/update-user.input-dto';
 import { GetUsersQueryParams } from './input-dto/get-users-query-params.input-dto';
 import { BasicAuthGuard } from '../../../core/guards/basic-auth.guard';
 import { Types } from 'mongoose';
-import { ObjectIdValidationPipe } from '../../../core/pipes/object-id-validation-transformation-pipe.service';
-import { IdInputDTO } from './input-dto/users-sort-by';
-
 import { CommandBus } from '@nestjs/cqrs';
 import { CreateUserCommand } from '../application/usecases/create-user.usecase';
 import { DeleteUserCommand } from '../application/usecases/delete-user.usecase';
@@ -39,9 +36,7 @@ export class UsersController {
 
   @ApiParam({ name: 'id' }) //для сваггера
   @Get(':id')
-  async getById(
-    @Param('id', ObjectIdValidationPipe) id: string,
-  ): Promise<UserViewDto> {
+  async getById(@Param('id') id: Types.ObjectId): Promise<UserViewDto> {
     return this.usersQueryRepository.getByIdOrNotFoundFail(id);
   }
 
@@ -54,9 +49,10 @@ export class UsersController {
 
   @Post()
   async createUser(@Body() body: CreateUserInputDto): Promise<UserViewDto> {
-    const userId = await this.commandBus.execute<CreateUserCommand, string>(
-      new CreateUserCommand(body),
-    );
+    const userId = await this.commandBus.execute<
+      CreateUserCommand,
+      Types.ObjectId
+    >(new CreateUserCommand(body));
 
     return this.usersQueryRepository.getByIdOrNotFoundFail(userId);
   }
@@ -68,16 +64,16 @@ export class UsersController {
     @Body() body: UpdateUserInputDto,
   ): Promise<UserViewDto> {
     await this.commandBus.execute<UpdateUserCommand, void>(
-      new UpdateUserCommand(id.toString(), body),
+      new UpdateUserCommand(id, body),
     );
 
-    return this.usersQueryRepository.getByIdOrNotFoundFail(id.toString());
+    return this.usersQueryRepository.getByIdOrNotFoundFail(id);
   }
 
   @ApiParam({ name: 'id' }) //для сваггера
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
-  async deleteUser(@Param() dto: IdInputDTO): Promise<void> {
-    return this.commandBus.execute(new DeleteUserCommand(dto.id.toString()));
+  async deleteUser(@Param('id') id: Types.ObjectId): Promise<void> {
+    return this.commandBus.execute(new DeleteUserCommand(id));
   }
 }

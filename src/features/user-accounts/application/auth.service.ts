@@ -22,7 +22,7 @@ export class AuthService {
     });
 
     if (isPasswordValid) {
-      return { id: user.id.toString() };
+      return { id: user.id };
     }
 
     throw UnauthorizedDomainException.create();

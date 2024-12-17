@@ -8,6 +8,7 @@ import { CreateUserDto } from '../../dto/create-user.dto';
 import { CreateUserCommand } from './create-user.usecase';
 import { UserRegisteredEvent } from '../../domain/events/user-registered.event';
 import { UsersRepository } from '../../infrastructure/users.repository';
+import { Types } from 'mongoose';
 
 export class RegisterUserCommand {
   constructor(public dto: CreateUserDto) {}
@@ -26,7 +27,7 @@ export class RegisterUserUseCase
   async execute({ dto }: RegisterUserCommand): Promise<void> {
     const createdUserId = await this.commandBus.execute<
       CreateUserCommand,
-      string
+      Types.ObjectId
     >(new CreateUserCommand(dto));
 
     const confirmCode = 'uuid';

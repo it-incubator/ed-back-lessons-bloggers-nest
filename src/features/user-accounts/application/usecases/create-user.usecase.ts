@@ -4,6 +4,7 @@ import { User, UserModelType } from '../../domain/user.entity';
 import { CreateUserDto } from '../../dto/create-user.dto';
 import { InjectModel } from '@nestjs/mongoose';
 import { CryptoService } from '../crypto.service';
+import { Types } from 'mongoose';
 
 export class CreateUserCommand {
   constructor(public dto: CreateUserDto) {}
@@ -11,7 +12,7 @@ export class CreateUserCommand {
 
 @CommandHandler(CreateUserCommand)
 export class CreateUserUseCase
-  implements ICommandHandler<CreateUserCommand, string>
+  implements ICommandHandler<CreateUserCommand, Types.ObjectId>
 {
   constructor(
     @InjectModel(User.name)
@@ -20,7 +21,7 @@ export class CreateUserUseCase
     private cryptoService: CryptoService,
   ) {}
 
-  async execute({ dto }: CreateUserCommand): Promise<string> {
+  async execute({ dto }: CreateUserCommand): Promise<Types.ObjectId> {
     const passwordHash = await this.cryptoService.createPasswordHash(
       dto.password,
     );
@@ -33,6 +34,6 @@ export class CreateUserUseCase
 
     await this.usersRepository.save(user);
 
-    return user._id.toString();
+    return user._id;
   }
 }

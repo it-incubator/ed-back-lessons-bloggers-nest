@@ -3,14 +3,14 @@ import { InjectModel } from '@nestjs/mongoose';
 import { UserViewDto } from '../../api/view-dto/users.view-dto';
 import { Injectable } from '@nestjs/common';
 
-import { FilterQuery } from 'mongoose';
+import { FilterQuery, Types } from 'mongoose';
 import { PaginatedViewDto } from '../../../../core/dto/base.paginated.view-dto';
 import { GetUsersQueryParams } from '../../api/input-dto/get-users-query-params.input-dto';
 import { NotFoundDomainException } from '../../../../core/exceptions/domain-exceptions';
 
 //для примера интерфейса для репозитория
 export interface IQueryRepository<TEntity, TQuery> {
-  getByIdOrNotFoundFail(id: string): Promise<TEntity>;
+  getByIdOrNotFoundFail(id: Types.ObjectId): Promise<TEntity>;
   getAll(query: TQuery): Promise<PaginatedViewDto<TEntity[]>>;
 }
 
@@ -23,7 +23,7 @@ export class UsersQueryRepository
     private UserModel: UserModelType,
   ) {}
 
-  async getByIdOrNotFoundFail(id: string): Promise<UserViewDto> {
+  async getByIdOrNotFoundFail(id: Types.ObjectId): Promise<UserViewDto> {
     const user = await this.UserModel.findOne({
       _id: id,
       deletionStatus: DeletionStatus.NotDeleted,

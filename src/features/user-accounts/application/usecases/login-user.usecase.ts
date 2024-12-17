@@ -5,9 +5,10 @@ import {
   REFRESH_TOKEN_STRATEGY_INJECT_TOKEN,
 } from '../../constants/auth-tokens.inject-constants';
 import { JwtService } from '@nestjs/jwt';
+import { Types } from 'mongoose';
 
 export class LoginUserCommand {
-  constructor(public dto: { userId: string }) {}
+  constructor(public dto: { userId: Types.ObjectId }) {}
 }
 
 @CommandHandler(LoginUserCommand)

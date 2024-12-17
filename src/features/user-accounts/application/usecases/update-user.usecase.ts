@@ -3,10 +3,11 @@ import { UsersRepository } from '../../infrastructure/users.repository';
 import { User, UserModelType } from '../../domain/user.entity';
 import { UpdateUserDto } from '../../dto/create-user.dto';
 import { InjectModel } from '@nestjs/mongoose';
+import { Types } from 'mongoose';
 
 export class UpdateUserCommand {
   constructor(
-    public id: string,
+    public id: Types.ObjectId,
     public dto: UpdateUserDto,
   ) {}
 }

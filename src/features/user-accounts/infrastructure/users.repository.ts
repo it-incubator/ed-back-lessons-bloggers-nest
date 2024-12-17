@@ -7,13 +7,14 @@ import {
 } from '../domain/user.entity';
 import { Injectable } from '@nestjs/common';
 import { NotFoundDomainException } from '../../../core/exceptions/domain-exceptions';
+import { Types } from 'mongoose';
 
 @Injectable()
 export class UsersRepository {
   //инжектирование модели через DI
   constructor(@InjectModel(User.name) private UserModel: UserModelType) {}
 
-  async findById(id: string): Promise<UserDocument | null> {
+  async findById(id: Types.ObjectId): Promise<UserDocument | null> {
     return this.UserModel.findOne({
       _id: id,
       deletionStatus: { $ne: DeletionStatus.PermanentDeleted },
@@ -24,7 +25,7 @@ export class UsersRepository {
     await user.save();
   }
 
-  async findOrNotFoundFail(id: string): Promise<UserDocument> {
+  async findOrNotFoundFail(id: Types.ObjectId): Promise<UserDocument> {
     const user = await this.findById(id);
 
     if (!user) {

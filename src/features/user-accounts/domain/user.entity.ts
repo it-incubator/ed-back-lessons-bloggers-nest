@@ -1,5 +1,5 @@
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
-import { HydratedDocument, Model, Types } from 'mongoose';
+import { HydratedDocument, Model } from 'mongoose';
 import { CreateUserDto, UpdateUserDto } from '../dto/create-user.dto';
 import { Name, NameSchema } from './name.schema';
 
