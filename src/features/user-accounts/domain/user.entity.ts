@@ -117,7 +117,7 @@ export class User {
       lastName: null, //'lastName yyy',
     };
 
-    return user as any;
+    return user as UserDocument;
   }
 
   /**

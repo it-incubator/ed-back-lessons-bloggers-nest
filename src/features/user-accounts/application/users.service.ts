@@ -5,11 +5,8 @@ import { CreateUserDto, UpdateUserDto } from '../dto/create-user.dto';
 import { UsersRepository } from '../infrastructure/users.repository';
 import { EmailService } from '../../notifications/email.service';
 import { CryptoService } from './crypto.service';
+import { BadRequestDomainException } from '../../../core/exceptions/domain-exceptions';
 import { Types } from 'mongoose';
-import {
-  BadRequestDomainException,
-  NotFoundDomainException,
-} from '../../../core/exceptions/domain-exceptions';
 
 @Injectable()
 export class UsersService {
@@ -22,7 +19,7 @@ export class UsersService {
     private cryptoService: CryptoService,
   ) {}
 
-  async createUser(dto: CreateUserDto): Promise<string> {
+  async createUser(dto: CreateUserDto) {
     const userWithTheSameLogin = await this.usersRepository.findByLogin(
       dto.login,
     );
@@ -44,7 +41,7 @@ export class UsersService {
 
     await this.usersRepository.save(user);
 
-    return user._id.toString();
+    return user._id;
   }
   async updateUser(id: Types.ObjectId, dto: UpdateUserDto): Promise<string> {
     const user = await this.usersRepository.findOrNotFoundFail(id);
