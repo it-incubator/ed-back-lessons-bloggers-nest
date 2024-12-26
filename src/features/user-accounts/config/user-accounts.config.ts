@@ -4,7 +4,7 @@ import { IsNotEmpty } from 'class-validator';
 import { configValidationUtility } from '../../../setup/config-validation.utility';
 
 @Injectable()
-export class UserAccountConfig {
+export class UserAccountsConfig {
   @IsNotEmpty({
     message: 'Set Env variable ACCESS_TOKEN_EXPIRE_IN, examples: 1h, 5m, 2d',
   })

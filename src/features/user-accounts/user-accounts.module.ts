@@ -22,7 +22,7 @@ import { DeleteUserUseCase } from './application/usecases/delete-user.usecase';
 import { RegisterUserUseCase } from './application/usecases/register-user.usecase';
 import { LoginUserUseCase } from './application/usecases/login-user.usecase';
 import { CoreConfig } from '../../core/core.config';
-import { UserAccountConfig } from './config/user-account.config';
+import { UserAccountsConfig } from './config/user-accounts.config';
 
 @Module({
   imports: [
@@ -53,27 +53,27 @@ import { UserAccountConfig } from './config/user-account.config';
       provide: ACCESS_TOKEN_STRATEGY_INJECT_TOKEN,
       useFactory: (
         coreConfig: CoreConfig,
-        userAccountConfig: UserAccountConfig,
+        userAccountConfig: UserAccountsConfig,
       ): JwtService => {
         return new JwtService({
           secret: coreConfig.accessTokenSecret,
           signOptions: { expiresIn: userAccountConfig.accessTokenExpireIn },
         });
       },
-      inject: [CoreConfig, UserAccountConfig],
+      inject: [CoreConfig, UserAccountsConfig],
     },
     {
       provide: REFRESH_TOKEN_STRATEGY_INJECT_TOKEN,
       useFactory: (
         coreConfig: CoreConfig,
-        userAccountConfig: UserAccountConfig,
+        userAccountConfig: UserAccountsConfig,
       ): JwtService => {
         return new JwtService({
           secret: coreConfig.refreshTokenSecret,
           signOptions: { expiresIn: userAccountConfig.refreshTokenExpireIn },
         });
       },
-      inject: [CoreConfig, UserAccountConfig],
+      inject: [CoreConfig, UserAccountsConfig],
     },
     UsersQueryRepository,
     SecurityDevicesQueryRepository,
@@ -83,7 +83,7 @@ import { UserAccountConfig } from './config/user-account.config';
     LocalStrategy,
     CryptoService,
     LoginUserUseCase,
-    UserAccountConfig,
+    UserAccountsConfig,
   ],
   exports: [UsersRepository, MongooseModule],
 })
