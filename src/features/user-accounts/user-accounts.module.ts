@@ -21,8 +21,6 @@ import { CreateUserUseCase } from './application/usecases/create-user.usecase';
 import { DeleteUserUseCase } from './application/usecases/delete-user.usecase';
 import { RegisterUserUseCase } from './application/usecases/register-user.usecase';
 import { LoginUserUseCase } from './application/usecases/login-user.usecase';
-import { CoreConfig } from '../../core/core.config';
-import { UserAccountsConfig } from './config/user-accounts.config';
 
 @Module({
   imports: [
@@ -51,29 +49,27 @@ import { UserAccountsConfig } from './config/user-accounts.config';
     //если надо внедрить несколько раз один и тот же класс
     {
       provide: ACCESS_TOKEN_STRATEGY_INJECT_TOKEN,
-      useFactory: (
-        coreConfig: CoreConfig,
-        userAccountConfig: UserAccountsConfig,
-      ): JwtService => {
+      useFactory: (): JwtService => {
         return new JwtService({
-          secret: coreConfig.accessTokenSecret,
-          signOptions: { expiresIn: userAccountConfig.accessTokenExpireIn },
+          secret: 'access-token-secret', //TODO: move to env. will be in the following lessons
+          signOptions: { expiresIn: '5m' },
         });
       },
-      inject: [CoreConfig, UserAccountsConfig],
+      inject: [
+        /*TODO: inject configService. will be in the following lessons*/
+      ],
     },
     {
       provide: REFRESH_TOKEN_STRATEGY_INJECT_TOKEN,
-      useFactory: (
-        coreConfig: CoreConfig,
-        userAccountConfig: UserAccountsConfig,
-      ): JwtService => {
+      useFactory: (): JwtService => {
         return new JwtService({
-          secret: coreConfig.refreshTokenSecret,
-          signOptions: { expiresIn: userAccountConfig.refreshTokenExpireIn },
+          secret: 'refresh-token-secret', //TODO: move to env. will be in the following lessons
+          signOptions: { expiresIn: '10m' },
         });
       },
-      inject: [CoreConfig, UserAccountsConfig],
+      inject: [
+        /*TODO: inject configService. will be in the following lessons*/
+      ],
     },
     UsersQueryRepository,
     SecurityDevicesQueryRepository,
@@ -83,7 +79,6 @@ import { UserAccountsConfig } from './config/user-accounts.config';
     LocalStrategy,
     CryptoService,
     LoginUserUseCase,
-    UserAccountsConfig,
   ],
   exports: [UsersRepository, MongooseModule],
 })

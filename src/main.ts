@@ -1,22 +1,16 @@
 import { NestFactory } from '@nestjs/core';
 import { appSetup } from './setup/app.setup';
-import { CoreConfig } from './core/core.config';
-import { initAppModule } from './init-app-module';
+import { AppModule } from './app.module';
 
 async function bootstrap() {
-  const dynamicAppModule = await initAppModule();
-  // создаём на основе донастроенного модуля наше приложение
-  const app = await NestFactory.create(dynamicAppModule);
+  const app = await NestFactory.create(AppModule);
 
-  const coreConfig = app.get<CoreConfig>(CoreConfig);
+  appSetup(app); //глобальные настройки приложения
 
-  await appSetup(app, coreConfig); //глобальные настройки приложения
-
-  const port = coreConfig.port;
+  const port = process.env.PORT || 5005; //TODO: move to configService. will be in the following lessons
 
   await app.listen(port, () => {
     console.log('App starting listen port: ', port);
-    console.log('NODE_ENV: ', coreConfig.env);
   });
 }
 bootstrap();

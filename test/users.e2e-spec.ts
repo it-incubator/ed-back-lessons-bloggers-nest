@@ -14,7 +14,6 @@ import { JwtService } from '@nestjs/jwt';
 import { delay } from './helpers/delay';
 import { EmailService } from '../src/features/notifications/email.service';
 import { ACCESS_TOKEN_STRATEGY_INJECT_TOKEN } from '../src/features/user-accounts/constants/auth-tokens.inject-constants';
-import { CoreConfig } from '../src/core/core.config';
 
 describe('users', () => {
   let app: INestApplication;
@@ -25,13 +24,15 @@ describe('users', () => {
       moduleBuilder
         .overrideProvider(ACCESS_TOKEN_STRATEGY_INJECT_TOKEN)
         .useFactory({
-          factory: (coreConfig: CoreConfig) => {
+          factory: () => {
             return new JwtService({
-              secret: coreConfig.accessTokenSecret,
+              secret: 'access-token-secret', //TODO: move to env. will be in the following lessons
               signOptions: { expiresIn: '2s' },
             });
           },
-          inject: [CoreConfig],
+          inject: [
+            /*TODO: inject configService. will be in the following lessons*/
+          ],
         }),
     );
     app = result.app;
