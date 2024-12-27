@@ -10,9 +10,11 @@ import { BloggersPlatformModule } from './features/bloggers-platform/bloggers-pl
 import { CoreModule } from './core/core.module';
 import { NotificationsModule } from './features/notifications/notifications.module';
 import { CoreConfig } from './core/core.config';
+import { CounterModule } from './features/scoped-logger-example/counter.module';
 
 @Module({
   imports: [
+    CounterModule,
     MongooseModule.forRootAsync({
       useFactory: (coreConfig: CoreConfig) => {
         const uri = coreConfig.mongoURI;
