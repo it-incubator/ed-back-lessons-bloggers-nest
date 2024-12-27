@@ -22,7 +22,7 @@ describe('users', () => {
     const result = await initSettings((moduleBuilder) =>
       moduleBuilder.overrideProvider(JwtService).useValue(
         new JwtService({
-          secret: 'secret_key',
+          secret: 'access-token-secret', //TODO: move to env. will be in the following lessons
           signOptions: { expiresIn: '2s' },
         }),
       ),
@@ -54,7 +54,7 @@ describe('users', () => {
       id: expect.any(String),
       createdAt: expect.any(String),
       firstName: expect.any(String),
-      lastName: expect.any(String),
+      lastName: null,
     });
   });
 
