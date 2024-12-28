@@ -7,13 +7,13 @@ import {
   Post,
   UseGuards,
 } from '@nestjs/common';
-import { LocalAuthGuard } from './guards/local-auth.guard';
+import { LocalAuthGuard } from '../guards/local/local-auth.guard';
 
 import { ExtractUserFromRequest } from '../../../core/decorators/param/extract-user-from-request';
 import { ApiBearerAuth, ApiBody } from '@nestjs/swagger';
-import { UserContext } from '../../../core/dto/user-context';
+import { UserContextDto } from '../guards/user-context-dto';
 import { MeViewDto } from './view-dto/users.view-dto';
-import { JwtAuthGuard } from '../../../core/guards/jwt-auth.guard';
+import { JwtAuthGuard } from '../guards/bearer/jwt-auth.guard';
 import { CommandBus } from '@nestjs/cqrs';
 import { CreateUserInputDto } from './input-dto/users.input-dto';
 import { RegisterUserCommand } from '../application/usecases/register-user.usecase';
@@ -46,7 +46,7 @@ export class AuthController {
   })
   login(
     /*@Request() req: any*/
-    @ExtractUserFromRequest() user: UserContext,
+    @ExtractUserFromRequest() user: UserContextDto,
   ): Promise<{ accessToken: string }> {
     return this.commandBus.execute(new LoginUserCommand({ userId: user.id }));
   }
@@ -54,7 +54,7 @@ export class AuthController {
   @ApiBearerAuth()
   @Get('me')
   @UseGuards(JwtAuthGuard)
-  me(@ExtractUserFromRequest() user: UserContext): Promise<MeViewDto> {
+  me(@ExtractUserFromRequest() user: UserContextDto): Promise<MeViewDto> {
     return this.authQueryRepository.me(user.id);
   }
 }

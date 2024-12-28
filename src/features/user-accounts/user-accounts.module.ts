@@ -10,7 +10,7 @@ import { AuthQueryRepository } from './infrastructure/query/auth.query-repositor
 import { SecurityDevicesController } from './api/security-devices.controller';
 import { LoginIsExistConstraint } from './api/validation/login-is-exist.decorator';
 import { AuthService } from './application/auth.service';
-import { LocalStrategy } from './api/guards/local.strategy';
+import { LocalStrategy } from './guards/local/local.strategy';
 import { JwtModule, JwtService } from '@nestjs/jwt';
 import { CryptoService } from './application/crypto.service';
 import {
@@ -21,8 +21,8 @@ import { CreateUserUseCase } from './application/usecases/create-user.usecase';
 import { DeleteUserUseCase } from './application/usecases/delete-user.usecase';
 import { RegisterUserUseCase } from './application/usecases/register-user.usecase';
 import { LoginUserUseCase } from './application/usecases/login-user.usecase';
-import { CoreConfig } from '../../core/core.config';
 import { UserAccountsConfig } from './config/user-accounts.config';
+import { JwtStrategy } from './guards/bearer/jwt.strategy';
 
 @Module({
   imports: [
@@ -51,29 +51,23 @@ import { UserAccountsConfig } from './config/user-accounts.config';
     //если надо внедрить несколько раз один и тот же класс
     {
       provide: ACCESS_TOKEN_STRATEGY_INJECT_TOKEN,
-      useFactory: (
-        coreConfig: CoreConfig,
-        userAccountConfig: UserAccountsConfig,
-      ): JwtService => {
+      useFactory: (userAccountConfig: UserAccountsConfig): JwtService => {
         return new JwtService({
-          secret: coreConfig.accessTokenSecret,
+          secret: userAccountConfig.accessTokenSecret,
           signOptions: { expiresIn: userAccountConfig.accessTokenExpireIn },
         });
       },
-      inject: [CoreConfig, UserAccountsConfig],
+      inject: [UserAccountsConfig],
     },
     {
       provide: REFRESH_TOKEN_STRATEGY_INJECT_TOKEN,
-      useFactory: (
-        coreConfig: CoreConfig,
-        userAccountConfig: UserAccountsConfig,
-      ): JwtService => {
+      useFactory: (userAccountConfig: UserAccountsConfig): JwtService => {
         return new JwtService({
-          secret: coreConfig.refreshTokenSecret,
+          secret: userAccountConfig.refreshTokenSecret,
           signOptions: { expiresIn: userAccountConfig.refreshTokenExpireIn },
         });
       },
-      inject: [CoreConfig, UserAccountsConfig],
+      inject: [UserAccountsConfig],
     },
     UsersQueryRepository,
     SecurityDevicesQueryRepository,
@@ -84,7 +78,8 @@ import { UserAccountsConfig } from './config/user-accounts.config';
     CryptoService,
     LoginUserUseCase,
     UserAccountsConfig,
+    JwtStrategy,
   ],
-  exports: [UsersRepository, MongooseModule],
+  exports: [UsersRepository, MongooseModule, JwtStrategy],
 })
 export class UserAccountsModule {}
