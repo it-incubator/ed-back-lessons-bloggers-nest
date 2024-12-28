@@ -1,7 +1,7 @@
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { PassportStrategy } from '@nestjs/passport';
 import { Injectable } from '@nestjs/common';
-import { UserContext } from '../dto/user-context';
+import { UserContextDto } from '../user-context-dto';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
@@ -17,7 +17,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
    * функция принимает payload из jwt токена и возвращает то, что будет записано в req.user
    * @param payload
    */
-  async validate(payload: UserContext): Promise<UserContext> {
+  async validate(payload: UserContextDto): Promise<UserContextDto> {
     return payload;
   }
 }

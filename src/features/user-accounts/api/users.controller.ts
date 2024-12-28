@@ -19,7 +19,7 @@ import { PaginatedViewDto } from '../../../core/dto/base.paginated.view-dto';
 import { ApiBasicAuth, ApiParam } from '@nestjs/swagger';
 import { UpdateUserInputDto } from './input-dto/update-user.input-dto';
 import { GetUsersQueryParams } from './input-dto/get-users-query-params.input-dto';
-import { BasicAuthGuard } from '../../../core/guards/basic-auth.guard';
+import { BasicAuthGuard } from '../guards/basic/basic-auth.guard';
 import { Types } from 'mongoose';
 import { ObjectIdValidationPipe } from '../../../core/pipes/object-id-validation-transformation-pipe.service';
 import { IdInputDTO } from './input-dto/users-sort-by';

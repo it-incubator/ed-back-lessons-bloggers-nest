@@ -12,17 +12,20 @@ import { SecurityDevicesController } from './api/security-devices.controller';
 import { LoginIsExistConstraint } from './api/validation/login-is-exist.decorator';
 import { NotificationsModule } from '../notifications/notifications.module';
 import { AuthService } from './application/auth.service';
-import { LocalStrategy } from './api/guards/local.strategy';
+import { LocalStrategy } from './guards/local/local.strategy';
 import { JwtModule } from '@nestjs/jwt';
 import { CryptoService } from './application/crypto.service';
+import { JwtStrategy } from './guards/bearer/jwt.strategy';
 
 @Module({
   imports: [
     //если в системе несколько токенов (например, access и refresh) с разными опциями (время жизни, секрет)
     //можно переопределить опции при вызове метода jwt.service.sign
     //или написать свой tokens сервис (адаптер), где эти опции будут уже учтены
+    //или использовать useFactory и регистрацию через токены для JwtService,
+    //для создания нескольких экземпляров в IoC с разными настройками (пример в следующих занятиях)
     JwtModule.register({
-      secret: 'secret_key', // секретный ключ (должен браться из env)
+      secret: 'access-token-secret', //TODO: move to env. will be in the following lessons
       signOptions: { expiresIn: '60m' }, // Время жизни токена
     }),
     MongooseModule.forFeature([{ name: User.name, schema: UserSchema }]),
@@ -39,7 +42,8 @@ import { CryptoService } from './application/crypto.service';
     AuthService,
     LocalStrategy,
     CryptoService,
+    JwtStrategy,
   ],
-  exports: [UsersRepository, MongooseModule],
+  exports: [UsersRepository, MongooseModule, JwtStrategy],
 })
 export class UserAccountsModule {}
