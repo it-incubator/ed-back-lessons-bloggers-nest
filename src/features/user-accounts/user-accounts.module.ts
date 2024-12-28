@@ -10,7 +10,7 @@ import { AuthQueryRepository } from './infrastructure/query/auth.query-repositor
 import { SecurityDevicesController } from './api/security-devices.controller';
 import { LoginIsExistConstraint } from './api/validation/login-is-exist.decorator';
 import { AuthService } from './application/auth.service';
-import { LocalStrategy } from './api/guards/local.strategy';
+import { LocalStrategy } from './guards/local/local.strategy';
 import { JwtModule, JwtService } from '@nestjs/jwt';
 import { CryptoService } from './application/crypto.service';
 import {
@@ -21,6 +21,7 @@ import { CreateUserUseCase } from './application/usecases/create-user.usecase';
 import { DeleteUserUseCase } from './application/usecases/delete-user.usecase';
 import { RegisterUserUseCase } from './application/usecases/register-user.usecase';
 import { LoginUserUseCase } from './application/usecases/login-user.usecase';
+import { JwtStrategy } from './guards/bearer/jwt.strategy';
 
 @Module({
   imports: [
@@ -79,7 +80,8 @@ import { LoginUserUseCase } from './application/usecases/login-user.usecase';
     LocalStrategy,
     CryptoService,
     LoginUserUseCase,
+    JwtStrategy,
   ],
-  exports: [UsersRepository, MongooseModule],
+  exports: [UsersRepository, MongooseModule, JwtStrategy],
 })
 export class UserAccountsModule {}
