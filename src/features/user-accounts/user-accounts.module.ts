@@ -24,7 +24,8 @@ import { SecurityDevicesController } from './api/security-devices.controller';
   ],
   exports: [
     UsersRepository,
-    MongooseModule /*MongooseModule реэкспорт делать необязательно*/,
+    MongooseModule /* MongooseModule реэкспорт делаем, если хотим чтобы зарегистрированные здесь модельки могли
+    инджектиться в сервисы других модулей, которые импортнут этот модуль */,
   ],
 })
 export class UserAccountsModule {}
