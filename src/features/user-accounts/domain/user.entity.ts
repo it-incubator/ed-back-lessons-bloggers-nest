@@ -2,6 +2,7 @@ import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument, Model } from 'mongoose';
 import { CreateUserDto, UpdateUserDto } from '../dto/create-user.dto';
 import { CreateUserDomainDto } from './dto/create-user.domain.dto';
+import { Name, NameSchema } from './name.schema';
 
 export enum DeletionStatus {
   NotDeleted = 'not-deleted',
@@ -46,6 +47,10 @@ export class User {
    */
   @Prop({ type: Boolean, required: true, default: false })
   isEmailConfirmed: boolean;
+
+  // @Prop(NameSchema) this variant from docdoesn't make validation for inner object
+  @Prop({ type: NameSchema })
+  name: Name;
 
   /**
    * Creation timestamp
@@ -93,6 +98,11 @@ export class User {
     user.passwordHash = dto.passwordHash;
     user.login = dto.login;
     user.isEmailConfirmed = false;
+
+    user.name = {
+      firstName: 'firstName xxx',
+      lastName: 'lastName yyy',
+    };
 
     return user as UserDocument;
   }
