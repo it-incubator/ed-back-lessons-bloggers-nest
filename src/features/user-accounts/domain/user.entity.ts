@@ -1,6 +1,7 @@
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument, Model } from 'mongoose';
 import { CreateUserDto, UpdateUserDto } from '../dto/create-user.dto';
+import { CreateUserDomainDto } from './dto/create-user.domain.dto';
 
 export enum DeletionStatus {
   NotDeleted = 'not-deleted',
@@ -58,6 +59,7 @@ export class User {
    * Status of deletion
    * @type {DeletionStatus}
    * @default DeletionStatus.NotDeleted
+   * в принципе этот статус избыточен и достаточно посмотреть на deletedAt - если он есть, значит запись удалена
    */
   @Prop({ enum: DeletionStatus, default: DeletionStatus.NotDeleted })
   deletionStatus: DeletionStatus;
@@ -67,11 +69,12 @@ export class User {
    * @type {Date | null}
    */
   @Prop({ type: Date, nullable: true })
-  deletedAt: Date;
+  deletedAt: Date | null;
 
   /**
    * Virtual property to get the stringified ObjectId
    * @returns {string} The string representation of the ID
+   * если ипсльзуете по всей системе шв айди как string, можете юзать, если id
    */
   get id() {
     // @ts-ignore
@@ -82,12 +85,14 @@ export class User {
    * Factory method to create a User instance
    * @param {CreateUserDto} dto - The data transfer object for user creation
    * @returns {UserDocument} The created user document
+   * DDD started: как создать сущность, чтобы она не нарушала бизнес-правила? Делегируем это создание статическому методу
    */
-  static createInstance(dto: CreateUserDto): UserDocument {
+  static createInstance(dto: CreateUserDomainDto): UserDocument {
     const user = new this();
     user.email = dto.email;
-    user.passwordHash = dto.password;
+    user.passwordHash = dto.passwordHash;
     user.login = dto.login;
+    user.isEmailConfirmed = false;
 
     return user as UserDocument;
   }
@@ -96,6 +101,7 @@ export class User {
    * Marks the user as deleted
    * Throws an error if already deleted
    * @throws {Error} If the entity is already deleted
+   * DDD сontinue: инкапсуляция (вызываем методы, которые меняют состояние\св-ва) объектов согласно правилам этого объекта
    */
   makeDeleted() {
     if (this.deletionStatus !== DeletionStatus.NotDeleted) {
@@ -108,6 +114,7 @@ export class User {
    * Updates the user instance with new data
    * Resets email confirmation if email is updated
    * @param {UpdateUserDto} dto - The data transfer object for user updates
+   * DDD сontinue: инкапсуляция (вызываем методы, которые меняют состояние\св-ва) объектов согласно правилам этого объекта
    */
   update(dto: UpdateUserDto) {
     if (dto.email !== this.email) {

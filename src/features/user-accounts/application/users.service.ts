@@ -21,7 +21,7 @@ export class UsersService {
     const user = this.UserModel.createInstance({
       email: dto.email,
       login: dto.login,
-      password: passwordHash,
+      passwordHash: passwordHash,
     });
 
     await this.usersRepository.save(user);
@@ -33,6 +33,8 @@ export class UsersService {
 
     console.log('user.id: ' + user.id);
 
+    // не присваиваем св-ва сущностям напрямую в сервисах! даже для изменения одного св-ва
+    // создаём метод
     user.update(dto); // change detection
 
     await this.usersRepository.save(user);
