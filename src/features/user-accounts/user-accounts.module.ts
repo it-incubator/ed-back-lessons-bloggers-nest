@@ -80,6 +80,6 @@ import { JwtStrategy } from './guards/bearer/jwt.strategy';
     UserAccountsConfig,
     JwtStrategy,
   ],
-  exports: [UsersRepository, MongooseModule, JwtStrategy],
+  exports: [UsersRepository, JwtStrategy],
 })
 export class UserAccountsModule {}
