@@ -24,6 +24,7 @@ import { CommandBus } from '@nestjs/cqrs';
 import { CreateUserCommand } from '../application/usecases/create-user.usecase';
 import { DeleteUserCommand } from '../application/usecases/delete-user.usecase';
 import { UpdateUserCommand } from '../application/usecases/update-user.usecase';
+import { Public } from '../guards/decorators/public.decorator';
 
 @Controller('users')
 @UseGuards(BasicAuthGuard)
@@ -40,6 +41,7 @@ export class UsersController {
     return this.usersQueryRepository.getByIdOrNotFoundFail(id);
   }
 
+  @Public()
   @Get()
   async getAll(
     @Query() query: GetUsersQueryParams,
