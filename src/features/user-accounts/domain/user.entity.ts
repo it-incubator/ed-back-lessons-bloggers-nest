@@ -1,6 +1,6 @@
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
 import { HydratedDocument, Model } from 'mongoose';
-import { CreateUserDto, UpdateUserDto } from '../dto/create-user.dto';
+import { UpdateUserDto } from '../dto/create-user.dto';
 import { CreateUserDomainDto } from './dto/create-user.domain.dto';
 import { Name, NameSchema } from './name.schema';
 
@@ -55,10 +55,11 @@ export class User {
   /**
    * Creation timestamp
    * Explicitly defined despite timestamps: true
+   * properties without @Prop for typescript so that they are in the class instance (or in instance methods)
    * @type {Date}
    */
-  @Prop({ type: Date })
   createdAt: Date;
+  updatedAt: Date;
 
   /**
    * Status of deletion
