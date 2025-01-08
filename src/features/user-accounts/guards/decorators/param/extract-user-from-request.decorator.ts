@@ -1,8 +1,8 @@
 import { createParamDecorator, ExecutionContext } from '@nestjs/common';
-import { UserContextDto } from '../../../features/user-accounts/guards/user-context-dto';
+import { UserContextDto } from '../../dto/user-context.dto';
 
 export const ExtractUserFromRequest = createParamDecorator(
-  (data: unknown, context: ExecutionContext): UserContextDto | null => {
+  (data: unknown, context: ExecutionContext): UserContextDto => {
     const request = context.switchToHttp().getRequest();
 
     const user = request.user;

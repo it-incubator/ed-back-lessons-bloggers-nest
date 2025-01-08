@@ -11,14 +11,14 @@ import { UsersService } from '../application/users.service';
 import { CreateUserInputDto } from './input-dto/users.input-dto';
 import { LocalAuthGuard } from '../guards/local/local-auth.guard';
 import { AuthService } from '../application/auth.service';
-import { ExtractUserFromRequest } from '../../../core/decorators/param/extract-user-from-request';
+import { ExtractUserFromRequest } from '../guards/decorators/param/extract-user-from-request.decorator';
 import { ApiBearerAuth, ApiBody } from '@nestjs/swagger';
-import { Nullable, UserContextDto } from '../guards/user-context-dto';
+import { Nullable, UserContextDto } from '../guards/dto/user-context.dto';
 import { MeViewDto } from './view-dto/users.view-dto';
 import { AuthQueryRepository } from '../infrastructure/query/auth.query-repository';
 import { JwtAuthGuard } from '../guards/bearer/jwt-auth.guard';
 import { JwtOptionalAuthGuard } from '../guards/bearer/jwt-optional-auth.guard';
-import { ExtractUserIfExistsFromRequest } from '../../../core/decorators/param/extract-user-if-exists-from-request';
+import { ExtractUserIfExistsFromRequest } from '../guards/decorators/param/extract-user-if-exists-from-request.decorator';
 
 @Controller('auth')
 export class AuthController {

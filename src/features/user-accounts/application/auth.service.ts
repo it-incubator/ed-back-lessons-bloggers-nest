@@ -1,8 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { UsersRepository } from '../infrastructure/users.repository';
-import { UnauthorizedDomainException } from '../../../core/exceptions/domain-exceptions';
 import { JwtService } from '@nestjs/jwt';
-import { UserContextDto } from '../guards/user-context-dto';
+import { UserContextDto } from '../guards/dto/user-context.dto';
 import { CryptoService } from './crypto.service';
 
 @Injectable()
@@ -12,10 +11,13 @@ export class AuthService {
     private jwtService: JwtService,
     private cryptoService: CryptoService,
   ) {}
-  async validateUser(login: string, password: string): Promise<UserContextDto> {
+  async validateUser(
+    login: string,
+    password: string,
+  ): Promise<UserContextDto | null> {
     const user = await this.usersRepository.findByLogin(login);
     if (!user) {
-      throw UnauthorizedDomainException.create();
+      return null;
     }
 
     const isPasswordValid = await this.cryptoService.comparePasswords({
@@ -23,11 +25,11 @@ export class AuthService {
       hash: user.passwordHash,
     });
 
-    if (isPasswordValid) {
-      return { id: user.id.toString() };
+    if (!isPasswordValid) {
+      return null;
     }
 
-    throw UnauthorizedDomainException.create();
+    return { id: user.id.toString() };
   }
 
   async login(userId: string) {
