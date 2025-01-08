@@ -44,6 +44,6 @@ import { JwtStrategy } from './guards/bearer/jwt.strategy';
     CryptoService,
     JwtStrategy,
   ],
-  exports: [UsersRepository, MongooseModule, JwtStrategy],
+  exports: [UsersRepository, JwtStrategy],
 })
 export class UserAccountsModule {}

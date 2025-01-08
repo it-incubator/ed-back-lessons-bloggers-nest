@@ -23,6 +23,7 @@ import { BasicAuthGuard } from '../guards/basic/basic-auth.guard';
 import { Types } from 'mongoose';
 import { ObjectIdValidationPipe } from '../../../core/pipes/object-id-validation-transformation-pipe.service';
 import { IdInputDTO } from './input-dto/users-sort-by';
+import { Public } from '../guards/decorators/public-decorator';
 
 @Controller('users')
 @UseGuards(BasicAuthGuard)
@@ -40,7 +41,7 @@ export class UsersController {
   ): Promise<UserViewDto> {
     return this.usersQueryRepository.getByIdOrNotFoundFail(id);
   }
-
+  @Public()
   @Get()
   async getAll(
     @Query() query: GetUsersQueryParams,
