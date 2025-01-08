@@ -29,7 +29,7 @@ export class CreateUserUseCase
     const user = this.UserModel.createInstance({
       email: dto.email,
       login: dto.login,
-      password: passwordHash,
+      passwordHash: passwordHash,
     });
 
     await this.usersRepository.save(user);
