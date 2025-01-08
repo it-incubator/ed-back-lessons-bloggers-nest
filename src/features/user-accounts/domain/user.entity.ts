@@ -1,6 +1,7 @@
 import { Schema, Prop, SchemaFactory } from '@nestjs/mongoose';
-import { HydratedDocument, Model, Types } from 'mongoose';
-import { CreateUserDto, UpdateUserDto } from '../dto/create-user.dto';
+import { HydratedDocument, Model } from 'mongoose';
+import { UpdateUserDto } from '../dto/create-user.dto';
+import { CreateUserDomainDto } from './dto/create-user.domain.dto';
 import { Name, NameSchema } from './name.schema';
 
 export enum DeletionStatus {
@@ -73,15 +74,17 @@ export class User {
   /**
    * Creation timestamp
    * Explicitly defined despite timestamps: true
+   * properties without @Prop for typescript so that they are in the class instance (or in instance methods)
    * @type {Date}
    */
-  @Prop({ type: Date })
   createdAt: Date;
+  updatedAt: Date;
 
   /**
    * Status of deletion
    * @type {DeletionStatus}
    * @default DeletionStatus.NotDeleted
+   * в принципе этот статус избыточен и достаточно посмотреть на deletedAt - если он есть, значит запись удалена
    */
   @Prop({ enum: DeletionStatus, default: DeletionStatus.NotDeleted })
   deletionStatus: DeletionStatus;
@@ -107,14 +110,16 @@ export class User {
    * @param {CreateUserDto} dto - The data transfer object for user creation
    * @returns {UserDocument} The created user document
    */
-  static createInstance(dto: CreateUserDto): UserDocument {
+  static createInstance(dto: CreateUserDomainDto): UserDocument {
     const user = new this();
     user.email = dto.email;
-    user.passwordHash = dto.password;
+    user.passwordHash = dto.passwordHash;
     user.login = dto.login;
+    user.isEmailConfirmed = false;
+
     user.name = {
       firstName: 'firstName xxx',
-      lastName: null, //'lastName yyy',
+      lastName: 'lastName yyy',
     };
 
     return user as UserDocument;
@@ -124,6 +129,7 @@ export class User {
    * Marks the user as deleted
    * Throws an error if already deleted
    * @throws {Error} If the entity is already deleted
+   * DDD сontinue: инкапсуляция (вызываем методы, которые меняют состояние\св-ва) объектов согласно правилам этого объекта
    */
   makeDeleted() {
     if (this.deletionStatus !== DeletionStatus.NotDeleted) {
@@ -140,6 +146,7 @@ export class User {
    * Updates the user instance with new data
    * Resets email confirmation if email is updated
    * @param {UpdateUserDto} dto - The data transfer object for user updates
+   * DDD сontinue: инкапсуляция (вызываем методы, которые меняют состояние\св-ва) объектов согласно правилам этого объекта
    */
   update(dto: UpdateUserDto) {
     if (dto.email !== this.email) {
@@ -154,9 +161,6 @@ export const UserSchema = SchemaFactory.createForClass(User);
 //регистрирует методы сущности в схеме
 UserSchema.loadClass(User);
 
-// export type UserDocumentOverride = {
-//   name: Types.Subdocument<Name>;
-// };
 //Типизация документа
 export type UserDocument = HydratedDocument<User>;
 

@@ -54,7 +54,7 @@ describe('users', () => {
       id: expect.any(String),
       createdAt: expect.any(String),
       firstName: expect.any(String),
-      lastName: null,
+      lastName: expect.any(String),
     });
   });
 
