@@ -15,7 +15,6 @@ export const initSettings = async (
   const testingModuleBuilder: TestingModuleBuilder = Test.createTestingModule({
     imports: [AppModule],
   })
-
     .overrideProvider(EmailService)
     .useClass(EmailServiceMock);
 
