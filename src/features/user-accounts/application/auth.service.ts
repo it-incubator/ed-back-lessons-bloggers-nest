@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { UsersRepository } from '../infrastructure/users.repository';
 import { UnauthorizedDomainException } from '../../../core/exceptions/domain-exceptions';
-import { UserContextDto } from '../guards/user-context-dto';
+import { UserContextDto } from '../guards/dto/user-context.dto';
 import { CryptoService } from './crypto.service';
 
 @Injectable()

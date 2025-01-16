@@ -1,7 +1,7 @@
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { PassportStrategy } from '@nestjs/passport';
 import { Injectable } from '@nestjs/common';
-import { UserContextDto } from '../user-context-dto';
+import { UserContextDto } from '../dto/user-context.dto';
 import { Types } from 'mongoose';
 import { UserAccountsConfig } from '../../config/user-accounts.config';
 
