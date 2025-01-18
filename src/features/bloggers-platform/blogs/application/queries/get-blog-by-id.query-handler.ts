@@ -21,7 +21,7 @@ export class GetBlogByIdQueryHandler
 {
   constructor(
     @Inject(BlogsQueryRepository)
-    private readonly queryRepository: BlogsQueryRepository,
+    private readonly blogsQueryRepository: BlogsQueryRepository,
     private readonly blogsRepository: BlogsRepository,
     private readonly usersRepository: UsersRepository,
   ) {}
@@ -41,6 +41,6 @@ export class GetBlogByIdQueryHandler
       }
     }
 
-    return this.queryRepository.getByIdOrNotFoundFail(query.id);
+    return this.blogsQueryRepository.getByIdOrNotFoundFail(query.id);
   }
 }
