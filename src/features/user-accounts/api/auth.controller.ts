@@ -41,8 +41,8 @@ export class AuthController {
     schema: {
       type: 'object',
       properties: {
-        login: { type: 'string', example: 'login123' },
-        password: { type: 'string', example: 'superpassword' },
+        login: { type: 'string', example: 'string' },
+        password: { type: 'string', example: 'string' },
       },
     },
   })
@@ -75,6 +75,7 @@ export class AuthController {
         email: null,
         firstName: null,
         lastName: null,
+        age: null,
       };
     }
   }

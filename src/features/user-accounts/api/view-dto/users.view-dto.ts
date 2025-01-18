@@ -8,6 +8,7 @@ export class UserViewDto {
   lastName: string | null;
   email: string;
   createdAt: Date;
+  age: number;
 
   static mapToView(user: UserDocument): UserViewDto {
     const dto = new UserViewDto();
@@ -18,6 +19,7 @@ export class UserViewDto {
     dto.createdAt = user.createdAt;
     dto.firstName = user.name.firstName;
     dto.lastName = user.name.lastName;
+    dto.age = user.age;
 
     return dto;
   }

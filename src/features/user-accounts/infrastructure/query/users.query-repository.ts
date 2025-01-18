@@ -39,7 +39,9 @@ export class UsersQueryRepository
   async getAll(
     query: GetUsersQueryParams,
   ): Promise<PaginatedViewDto<UserViewDto[]>> {
-    const filter: FilterQuery<User> = {};
+    const filter: FilterQuery<User> = {
+      deletionStatus: DeletionStatus.NotDeleted,
+    };
 
     if (query.searchLoginTerm) {
       filter.$or = filter.$or || [];
@@ -55,10 +57,7 @@ export class UsersQueryRepository
       });
     }
 
-    const users = await this.UserModel.find({
-      ...filter,
-      deletionStatus: DeletionStatus.NotDeleted,
-    })
+    const users = await this.UserModel.find(filter)
       .sort({ [query.sortBy]: query.sortDirection })
       .skip(query.calculateSkip())
       .limit(query.pageSize);

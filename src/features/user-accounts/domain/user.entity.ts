@@ -64,6 +64,14 @@ export class User {
   email: string;
 
   /**
+   * Age of the user
+   * @type {number}
+   * @required
+   */
+  @Prop({ type: Number, required: true })
+  age: number;
+
+  /**
    * Email confirmation status (if not confirmed in 2 days account will be deleted)
    * @type {boolean}
    * @default false
@@ -116,6 +124,7 @@ export class User {
     user.passwordHash = dto.passwordHash;
     user.login = dto.login;
     user.isEmailConfirmed = false;
+    user.age = dto.age;
 
     user.name = {
       firstName: 'firstName xxx',
