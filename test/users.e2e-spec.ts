@@ -52,6 +52,7 @@ describe('users', () => {
       login: 'name1',
       password: 'qwerty',
       email: 'email@email.em',
+      age: 15,
     };
 
     const response = await userTestManger.createUser(body);
@@ -63,6 +64,7 @@ describe('users', () => {
       createdAt: expect.any(String),
       firstName: expect.any(String),
       lastName: expect.any(String),
+      age: expect.any(Number),
     });
   });
 
@@ -106,6 +108,7 @@ describe('users', () => {
         email: 'email@email.em',
         password: '123123123',
         login: 'login123',
+        age: 15,
       } as CreateUserDto)
       .expect(HttpStatus.CREATED);
   });
@@ -121,6 +124,7 @@ describe('users', () => {
         email: 'email@email.em',
         password: '123123123',
         login: 'login123',
+        age: 15,
       } as CreateUserDto)
       .expect(HttpStatus.CREATED);
 
