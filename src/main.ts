@@ -4,13 +4,13 @@ import { CoreConfig } from './core/core.config';
 import { initAppModule } from './init-app-module';
 
 async function bootstrap() {
-  const dynamicAppModule = await initAppModule();
+  const DynamicAppModule = await initAppModule();
   // создаём на основе донастроенного модуля наше приложение
-  const app = await NestFactory.create(dynamicAppModule);
+  const app = await NestFactory.create(DynamicAppModule);
 
   const coreConfig = app.get<CoreConfig>(CoreConfig);
 
-  await appSetup(app, coreConfig); //глобальные настройки приложения
+  await appSetup(app, coreConfig, DynamicAppModule); //глобальные настройки приложения
 
   const port = coreConfig.port;
 

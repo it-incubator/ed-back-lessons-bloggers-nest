@@ -2,7 +2,7 @@ import { INestApplication } from '@nestjs/common';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { GLOBAL_PREFIX } from './global-prefix.setup';
 
-export function swaggerSetup(app: INestApplication, isSwaggerEnabled) {
+export function swaggerSetup(app: INestApplication, isSwaggerEnabled: boolean) {
   if (isSwaggerEnabled) {
     const config = new DocumentBuilder()
       .setTitle('BLOGGER API')

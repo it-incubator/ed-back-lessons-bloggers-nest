@@ -13,9 +13,9 @@ export const initSettings = async (
   //передаем callback, который получает ModuleBuilder, если хотим изменить настройку тестового модуля
   addSettingsToModuleBuilder?: (moduleBuilder: TestingModuleBuilder) => void,
 ) => {
-  const dynamicAppModule = await initAppModule();
+  const DynamicAppModule = await initAppModule();
   const testingModuleBuilder: TestingModuleBuilder = Test.createTestingModule({
-    imports: [dynamicAppModule],
+    imports: [DynamicAppModule],
   })
     .overrideProvider(EmailService)
     .useClass(EmailServiceMock);
@@ -28,7 +28,7 @@ export const initSettings = async (
 
   const app = testingAppModule.createNestApplication();
   const coreConfig = app.get<CoreConfig>(CoreConfig);
-  await appSetup(app, coreConfig);
+  await appSetup(app, coreConfig, DynamicAppModule);
 
   await app.init();
 

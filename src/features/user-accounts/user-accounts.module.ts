@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { UsersController } from './api/users.controller';
-import { getModelToken, MongooseModule } from '@nestjs/mongoose';
-import { User, UserModelType, UserSchema } from './domain/user.entity';
+import { MongooseModule } from '@nestjs/mongoose';
+import { User, UserSchema } from './domain/user.entity';
 import { UsersRepository } from './infrastructure/users.repository';
 import { UsersQueryRepository } from './infrastructure/query/users.query-repository';
 import { AuthController } from './api/auth.controller';
@@ -35,17 +35,17 @@ import { JwtStrategy } from './guards/bearer/jwt.strategy';
     UsersRepository,
     DeleteUserUseCase,
     RegisterUserUseCase,
+    CreateUserUseCase,
     {
-      provide: CreateUserUseCase,
+      provide: AuthService,
       //вмешиваемся в процесс и вручную инстанцируем класс
       useFactory: (
-        userRepository: UsersRepository,
-        UserModel: UserModelType,
+        usersRepository: UsersRepository,
         cryptoService: CryptoService,
       ) => {
-        return new CreateUserUseCase(UserModel, userRepository, cryptoService);
+        return new AuthService(usersRepository, cryptoService);
       },
-      inject: [UsersRepository, getModelToken(User.name), CryptoService],
+      inject: [UsersRepository, CryptoService],
     },
     //пример инстанцирования через токен
     //если надо внедрить несколько раз один и тот же класс
@@ -73,7 +73,6 @@ import { JwtStrategy } from './guards/bearer/jwt.strategy';
     SecurityDevicesQueryRepository,
     AuthQueryRepository,
     LoginIsExistConstraint,
-    AuthService,
     LocalStrategy,
     CryptoService,
     LoginUserUseCase,
