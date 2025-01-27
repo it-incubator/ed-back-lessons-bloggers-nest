@@ -6,7 +6,7 @@ import { useContainer } from 'class-validator';
  * @param app
  * @param DynamicAppModule
  */
-export const validationConstraintSetup = async (
+export const validationConstraintSetup = (
   app: INestApplication,
   DynamicAppModule: DynamicModule,
 ) => {

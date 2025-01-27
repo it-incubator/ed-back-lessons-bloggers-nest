@@ -6,7 +6,7 @@ import { validationConstraintSetup } from './validation-constraint.setup';
 import { exceptionFilterSetup } from './exception-filter.setup';
 import { CoreConfig } from '../core/core.config';
 
-export async function appSetup(
+export function appSetup(
   app: INestApplication,
   coreConfig: CoreConfig,
   DynamicAppModule: DynamicModule,
@@ -14,6 +14,6 @@ export async function appSetup(
   pipesSetup(app);
   globalPrefixSetup(app);
   swaggerSetup(app, coreConfig.isSwaggerEnabled);
-  await validationConstraintSetup(app, DynamicAppModule);
+  validationConstraintSetup(app, DynamicAppModule);
   exceptionFilterSetup(app, coreConfig);
 }
