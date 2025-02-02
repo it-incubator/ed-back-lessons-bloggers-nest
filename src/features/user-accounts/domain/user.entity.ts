@@ -62,15 +62,6 @@ export class User {
   updatedAt: Date;
 
   /**
-   * Status of deletion
-   * @type {DeletionStatus}
-   * @default DeletionStatus.NotDeleted
-   * в принципе этот статус избыточен и достаточно посмотреть на deletedAt - если он есть, значит запись удалена
-   */
-  @Prop({ enum: DeletionStatus, default: DeletionStatus.NotDeleted })
-  deletionStatus: DeletionStatus;
-
-  /**
    * Deletion timestamp, nullable, if date exist, means entity soft deleted
    * @type {Date | null}
    */
@@ -98,7 +89,7 @@ export class User {
     user.email = dto.email;
     user.passwordHash = dto.passwordHash;
     user.login = dto.login;
-    user.isEmailConfirmed = false;
+    user.isEmailConfirmed = false; // пользователь ВСЕГДА должен после регистрации подтверждить свой Email
 
     user.name = {
       firstName: 'firstName xxx',
@@ -115,10 +106,10 @@ export class User {
    * DDD сontinue: инкапсуляция (вызываем методы, которые меняют состояние\св-ва) объектов согласно правилам этого объекта
    */
   makeDeleted() {
-    if (this.deletionStatus !== DeletionStatus.NotDeleted) {
+    if (this.deletedAt !== null) {
       throw new Error('Entity already deleted');
     }
-    this.deletionStatus = DeletionStatus.PermanentDeleted;
+    this.deletedAt = new Date();
   }
 
   /**
