@@ -1,10 +1,5 @@
 import { InjectModel } from '@nestjs/mongoose';
-import {
-  DeletionStatus,
-  User,
-  UserDocument,
-  UserModelType,
-} from '../domain/user.entity';
+import { User, UserDocument, UserModelType } from '../domain/user.entity';
 import { Injectable, NotFoundException } from '@nestjs/common';
 
 @Injectable()
