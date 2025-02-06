@@ -75,6 +75,7 @@ export class AuthController {
         email: null,
         firstName: null,
         lastName: null,
+        age: null,
       };
     }
   }

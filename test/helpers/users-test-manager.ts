@@ -75,6 +75,7 @@ export class UsersTestManager {
         login: `test` + i,
         email: `test${i}@gmail.com`,
         password: '123456789',
+        age: 15,
       });
       usersPromises.push(response);
     }

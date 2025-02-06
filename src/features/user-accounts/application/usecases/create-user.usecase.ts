@@ -30,6 +30,7 @@ export class CreateUserUseCase
       email: dto.email,
       login: dto.login,
       passwordHash: passwordHash,
+      age: dto.age,
     });
 
     await this.usersRepository.save(user);

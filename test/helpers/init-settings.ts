@@ -28,7 +28,7 @@ export const initSettings = async (
 
   const app = testingAppModule.createNestApplication();
   const coreConfig = app.get<CoreConfig>(CoreConfig);
-  await appSetup(app, coreConfig, DynamicAppModule);
+  appSetup(app, coreConfig, DynamicAppModule);
 
   await app.init();
 

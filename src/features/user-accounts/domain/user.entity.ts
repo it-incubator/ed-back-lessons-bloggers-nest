@@ -59,6 +59,14 @@ export class User {
   email: string;
 
   /**
+   * Age of the user
+   * @type {number}
+   * @required
+   */
+  @Prop({ type: Number, required: true })
+  age: number;
+
+  /**
    * Email confirmation status (if not confirmed in 2 days account will be deleted)
    * @type {boolean}
    * @default false
@@ -80,11 +88,12 @@ export class User {
    * @type {Date | null}
    */
   @Prop({ type: Date, nullable: true })
-  deletedAt: Date;
+  deletedAt: Date | null;
 
   /**
    * Virtual property to get the stringified ObjectId
    * @returns {string} The string representation of the ID
+   * если ипсльзуете по всей системе шв айди как string, можете юзать, если id
    */
   get id() {
     // @ts-ignore
@@ -95,6 +104,7 @@ export class User {
    * Factory method to create a User instance
    * @param {CreateUserDto} dto - The data transfer object for user creation
    * @returns {UserDocument} The created user document
+   * DDD started: как создать сущность, чтобы она не нарушала бизнес-правила? Делегируем это создание статическому методу
    */
   static createInstance(dto: CreateUserDomainDto): UserDocument {
     const user = new this();
@@ -102,6 +112,7 @@ export class User {
     user.passwordHash = dto.passwordHash;
     user.login = dto.login;
     user.isEmailConfirmed = false; // пользователь ВСЕГДА должен после регистрации подтверждить свой Email
+    user.age = dto.age;
 
     user.name = {
       firstName: 'firstName xxx',
