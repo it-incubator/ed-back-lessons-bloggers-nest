@@ -4,11 +4,6 @@ import { UpdateUserDto } from '../dto/create-user.dto';
 import { CreateUserDomainDto } from './dto/create-user.domain.dto';
 import { Name, NameSchema } from './name.schema';
 
-export enum DeletionStatus {
-  NotDeleted = 'not-deleted',
-  PermanentDeleted = 'permanent-deleted',
-}
-
 export const loginConstraints = {
   minLength: 3,
   maxLength: 10,

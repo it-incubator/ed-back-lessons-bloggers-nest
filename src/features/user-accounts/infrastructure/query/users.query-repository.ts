@@ -1,12 +1,12 @@
-import { DeletionStatus, User, UserModelType } from '../../domain/user.entity';
+import { User, UserModelType } from '../../domain/user.entity';
 import { InjectModel } from '@nestjs/mongoose';
 import { UserViewDto } from '../../api/view-dto/users.view-dto';
 import { Injectable } from '@nestjs/common';
 
 import { FilterQuery, Types } from 'mongoose';
-import { PaginatedViewDto } from '../../../../core/dto/base.paginated.view-dto';
+import { PaginatedViewDto } from '@core/dto/base.paginated.view-dto';
 import { GetUsersQueryParams } from '../../api/input-dto/get-users-query-params.input-dto';
-import { NotFoundDomainException } from '../../../../core/exceptions/domain-exceptions';
+import { NotFoundDomainException } from '@core/exceptions/domain-exceptions';
 
 //для примера интерфейса для репозитория
 export interface IQueryRepository<TEntity, TQuery> {
@@ -26,7 +26,7 @@ export class UsersQueryRepository
   async getByIdOrNotFoundFail(id: Types.ObjectId): Promise<UserViewDto> {
     const user = await this.UserModel.findOne({
       _id: id,
-      deletionStatus: DeletionStatus.NotDeleted,
+      deletedAt: null,
     });
 
     if (!user) {
@@ -39,7 +39,9 @@ export class UsersQueryRepository
   async getAll(
     query: GetUsersQueryParams,
   ): Promise<PaginatedViewDto<UserViewDto[]>> {
-    const filter: FilterQuery<User> = {};
+    const filter: FilterQuery<User> = {
+      deletedAt: null,
+    };
 
     if (query.searchLoginTerm) {
       filter.$or = filter.$or || [];
@@ -55,10 +57,7 @@ export class UsersQueryRepository
       });
     }
 
-    const users = await this.UserModel.find({
-      ...filter,
-      deletionStatus: DeletionStatus.NotDeleted,
-    })
+    const users = await this.UserModel.find(filter)
       .sort({ [query.sortBy]: query.sortDirection })
       .skip(query.calculateSkip())
       .limit(query.pageSize);
