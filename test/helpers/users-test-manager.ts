@@ -1,13 +1,13 @@
 import { HttpStatus, INestApplication } from '@nestjs/common';
 import request from 'supertest';
-import { CreateUserInputDto } from '../../src/features/user-accounts/api/input-dto/users.input-dto';
+import { CreateUserInputDto } from '@features/user-accounts/api/input-dto/users.input-dto';
 import {
   MeViewDto,
   UserViewDto,
-} from '../../src/features/user-accounts/api/view-dto/users.view-dto';
-import { GLOBAL_PREFIX } from '../../src/setup/global-prefix.setup';
+} from '@features/user-accounts/api/view-dto/users.view-dto';
+import { GLOBAL_PREFIX } from '@src/setup/global-prefix.setup';
 import { delay } from './delay';
-import { UpdateUserInputDto } from '../../src/features/user-accounts/api/input-dto/update-user.input-dto';
+import { UpdateUserInputDto } from '@features/user-accounts/api/input-dto/update-user.input-dto';
 
 export class UsersTestManager {
   constructor(private app: INestApplication) {}
