@@ -4,11 +4,6 @@ import { UpdateUserDto } from '../dto/create-user.dto';
 import { CreateUserDomainDto } from './dto/create-user.domain.dto';
 import { Name, NameSchema } from './name.schema';
 
-export enum DeletionStatus {
-  NotDeleted = 'not-deleted',
-  PermanentDeleted = 'permanent-deleted',
-}
-
 export const loginConstraints = {
   minLength: 3,
   maxLength: 10,
@@ -85,11 +80,12 @@ export class User {
    * @type {Date | null}
    */
   @Prop({ type: Date, nullable: true })
-  deletedAt: Date;
+  deletedAt: Date | null;
 
   /**
    * Virtual property to get the stringified ObjectId
    * @returns {string} The string representation of the ID
+   * если ипсльзуете по всей системе шв айди как string, можете юзать, если id
    */
   get id() {
     // @ts-ignore
@@ -100,6 +96,7 @@ export class User {
    * Factory method to create a User instance
    * @param {CreateUserDto} dto - The data transfer object for user creation
    * @returns {UserDocument} The created user document
+   * DDD started: как создать сущность, чтобы она не нарушала бизнес-правила? Делегируем это создание статическому методу
    */
   static createInstance(dto: CreateUserDomainDto): UserDocument {
     const user = new this();
