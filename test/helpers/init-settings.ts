@@ -1,13 +1,13 @@
 import { getConnectionToken } from '@nestjs/mongoose';
 import { Test, TestingModuleBuilder } from '@nestjs/testing';
 import { Connection } from 'mongoose';
-import { appSetup } from '../../src/setup/app.setup';
+import { appSetup } from '@src/setup/app.setup';
 import { UsersTestManager } from './users-test-manager';
 import { deleteAllData } from './delete-all-data';
-import { EmailService } from '../../src/features/notifications/email.service';
+import { EmailService } from '@features/notifications/email.service';
 import { EmailServiceMock } from '../mock/email-service.mock';
-import { CoreConfig } from '../../src/core/core.config';
-import { initAppModule } from '../../src/init-app-module';
+import { CoreConfig } from '@core/core.config';
+import { initAppModule } from '@src/init-app-module';
 
 export const initSettings = async (
   //передаем callback, который получает ModuleBuilder, если хотим изменить настройку тестового модуля

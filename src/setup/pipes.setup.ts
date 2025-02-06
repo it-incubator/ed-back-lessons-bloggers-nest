@@ -1,8 +1,8 @@
 import { INestApplication, ValidationPipe } from '@nestjs/common';
 
 import { ValidationError } from '@nestjs/common';
-import { BadRequestDomainException } from '../core/exceptions/domain-exceptions';
-import { ObjectIdValidationTransformationPipe } from '../core/pipes/object-id-validation-transformation-pipe.service';
+import { BadRequestDomainException } from '@core/exceptions/domain-exceptions';
+import { ObjectIdValidationTransformationPipe } from '@core/pipes/object-id-validation-transformation-pipe.service';
 
 type ErrorResponse = { message: string; key: string };
 

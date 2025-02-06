@@ -4,7 +4,7 @@ import { globalPrefixSetup } from './global-prefix.setup';
 import { swaggerSetup } from './swagger.setup';
 import { validationConstraintSetup } from './validation-constraint.setup';
 import { exceptionFilterSetup } from './exception-filter.setup';
-import { CoreConfig } from '../core/core.config';
+import { CoreConfig } from '@core/core.config';
 
 export function appSetup(
   app: INestApplication,

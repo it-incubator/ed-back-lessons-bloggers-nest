@@ -1,10 +1,10 @@
 import { IsEmail, IsString, Length } from 'class-validator';
-import { Trim } from '../../../../core/decorators/transform/trim';
+import { Trim } from '@core/decorators/transform/trim';
 import {
   loginConstraints,
   passwordConstraints,
 } from '../../domain/user.entity';
-import { IsStringWithTrim } from '../../../../core/decorators/validation/is-string-with-trim';
+import { IsStringWithTrim } from '@core/decorators/validation/is-string-with-trim';
 import { LoginIsExist } from '../validation/login-is-exist.decorator';
 
 // Доступные декораторы для валидации
