@@ -10,7 +10,13 @@ async function bootstrap() {
   const PORT = process.env.PORT || 5005; //TODO: move to configService. will be in the following lessons
 
   await app.listen(PORT, () => {
-    console.log('Server is running on port ' + PORT);
+    console.log(
+      'Server is running on port ' +
+        PORT +
+        ' http://localhost:' +
+        PORT +
+        '/api',
+    );
   });
 }
 bootstrap();
