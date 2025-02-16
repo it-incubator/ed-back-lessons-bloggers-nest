@@ -23,6 +23,11 @@ import { RegisterUserUseCase } from './application/usecases/register-user.usecas
 import { LoginUserUseCase } from './application/usecases/login-user.usecase';
 import { UserAccountsConfig } from './config/user-accounts.config';
 import { JwtStrategy } from './guards/bearer/jwt.strategy';
+import { StripeService } from '@features/user-accounts/application/stripe.service';
+import { PaypalService } from '@features/user-accounts/application/paypal.service';
+import { IPaymentStrategy } from '@features/user-accounts/application/payment.strategy.interface';
+import { REQUEST } from '@nestjs/core';
+import { Request } from 'express';
 
 @Module({
   imports: [
@@ -31,6 +36,26 @@ import { JwtStrategy } from './guards/bearer/jwt.strategy';
   ],
   controllers: [UsersController, AuthController, SecurityDevicesController],
   providers: [
+    StripeService,
+    PaypalService,
+    {
+      provide: IPaymentStrategy,
+      useFactory(
+        request: Request,
+        stripeService: StripeService,
+        paypalService: PaypalService,
+      ) {
+        const paymentSystemType = request.query.paymentSystemType; // Example: ?paymentMethod=stripe
+        switch (paymentSystemType) {
+          case 'paypal':
+            return paypalService;
+          case 'stripe':
+          default:
+            return stripeService;
+        }
+      },
+      inject: [REQUEST, StripeService, PaypalService],
+    },
     //варианты регистрации провайдеров
     UsersRepository,
     DeleteUserUseCase,

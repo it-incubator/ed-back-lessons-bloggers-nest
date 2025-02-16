@@ -9,6 +9,7 @@ import {
   Post,
   Put,
   Query,
+  Scope,
   UseGuards,
 } from '@nestjs/common';
 import { UsersQueryRepository } from '../infrastructure/query/users.query-repository';
@@ -25,15 +26,22 @@ import { CreateUserCommand } from '../application/usecases/create-user.usecase';
 import { DeleteUserCommand } from '../application/usecases/delete-user.usecase';
 import { UpdateUserCommand } from '../application/usecases/update-user.usecase';
 import { Public } from '../guards/decorators/public.decorator';
+import { IPaymentStrategy } from '@features/user-accounts/application/payment.strategy.interface';
 
-@Controller('users')
+@Controller({
+  path: 'users',
+  scope: Scope.DEFAULT,
+})
 @UseGuards(BasicAuthGuard)
 @ApiBasicAuth('basicAuth')
 export class UsersController {
   constructor(
     private usersQueryRepository: UsersQueryRepository,
     private readonly commandBus: CommandBus,
-  ) {}
+    private readonly paymentStrategy: IPaymentStrategy,
+  ) {
+    console.log('UsersController created');
+  }
 
   @ApiParam({ name: 'id' }) //для сваггера
   @Get(':id')
@@ -78,4 +86,21 @@ export class UsersController {
   async deleteUser(@Param('id') id: Types.ObjectId): Promise<void> {
     return this.commandBus.execute(new DeleteUserCommand(id));
   }
+
+  // @ApiParam({ name: 'orderId' }) //для сваггера
+  // @Post('payment/:orderId')
+  // //@HttpCode(HttpStatus.NO_CONTENT)
+  // @Public()
+  // async makePayment(
+  //   @Param('orderId') orderId: number,
+  //   @Query('paymentSystemType') paymentSystemType: 'stripe' | 'paypal',
+  // ): Promise<{ url: string }> {
+  //   return { url: this.paymentStrategy.makePayment(orderId, 100) };
+  //   // switch (paymentSystemType) {
+  //   //   case 'stripe':
+  //   //     return { url: this.stripeService.makePayment(orderId, 100) };
+  //   //   case 'paypal':
+  //   //     return { url: this.paypalService.makePayment(orderId, 100) };
+  //   // }
+  // }
 }
