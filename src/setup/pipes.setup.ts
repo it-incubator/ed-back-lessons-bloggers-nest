@@ -1,10 +1,11 @@
 import { INestApplication, ValidationPipe } from '@nestjs/common';
 
 import { ValidationError } from '@nestjs/common';
-import { BadRequestDomainException } from '../core/exceptions/domain-exceptions';
+import {
+  BadRequestDomainException,
+  ErrorExtension,
+} from '../core/exceptions/domain-exceptions';
 import { ObjectIdValidationTransformationPipe } from '../core/pipes/object-id-validation-transformation-pipe.service';
-
-type ErrorResponse = { message: string; key: string };
 
 //функция использует рекурсию для обхода объекта children при вложенных полях при валидации
 //поставьте логи и разберитесь как она работает
@@ -12,7 +13,7 @@ type ErrorResponse = { message: string; key: string };
 export const errorFormatter = (
   errors: ValidationError[],
   errorMessage?: any,
-): ErrorResponse[] => {
+): ErrorExtension[] => {
   const errorsForResponse = errorMessage || [];
 
   for (const error of errors) {

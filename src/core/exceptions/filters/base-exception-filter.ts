@@ -1,6 +1,6 @@
 import { ArgumentsHost, ExceptionFilter } from '@nestjs/common';
 import { Request, Response } from 'express';
-import { DomainException, ErrorExtension } from '../domain-exceptions';
+import { ErrorExtension } from '../domain-exceptions';
 import { DomainExceptionCode } from '../domain-exception-codes';
 
 export type HttpResponseBody = {
@@ -11,25 +11,20 @@ export type HttpResponseBody = {
   code: DomainExceptionCode | null;
 };
 
-export abstract class BaseExceptionFilter implements ExceptionFilter {
-  abstract onCatch(exception: any, response: Response, request: Request): void;
+export abstract class BaseHttpExceptionFilter<T = unknown>
+  implements ExceptionFilter
+{
+  abstract getStatus(exception: T): number;
+  abstract getResponseBody(exception: T, request: Request): HttpResponseBody;
 
-  catch(exception: any, host: ArgumentsHost): any {
+  catch(exception: T, host: ArgumentsHost): void {
     const ctx = host.switchToHttp();
-    const response = ctx.getResponse();
-    const request = ctx.getRequest();
+    const response = ctx.getResponse<Response>();
+    const request = ctx.getRequest<Request>();
 
-    this.onCatch(exception, response, request);
-  }
+    const status = this.getStatus(exception);
+    const responseBody = this.getResponseBody(exception, request);
 
-  getDefaultHttpBody(url: string, exception: unknown): HttpResponseBody {
-    return {
-      timestamp: new Date().toISOString(),
-      path: url,
-      message: (exception as any).message || 'Internal server error',
-      code: exception instanceof DomainException ? exception.code : null,
-      extensions:
-        exception instanceof DomainException ? exception.extensions : [],
-    };
+    response.status(status).json(responseBody);
   }
 }
