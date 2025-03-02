@@ -32,7 +32,7 @@ export class User {
    * @type {string}
    * @required
    */
-  @Prop({ type: String, required: true })
+  @Prop({ type: String, min: 5, required: true })
   email: string;
 
   /**
@@ -116,8 +116,8 @@ export class User {
   update(dto: UpdateUserDto) {
     if (dto.email !== this.email) {
       this.isEmailConfirmed = false;
+      this.email = dto.email;
     }
-    this.email = dto.email;
   }
 }
 

@@ -9,6 +9,8 @@ import { AuthController } from './api/auth.controller';
 import { SecurityDevicesQueryRepository } from './infrastructure/query/security-devices.query-repository';
 import { AuthQueryRepository } from './infrastructure/query/auth.query-repository';
 import { SecurityDevicesController } from './api/security-devices.controller';
+import { UsersExternalQueryRepository } from './infrastructure/external-query/users.external-query-repository';
+import { UsersExternalService } from './application/users.external-service';
 
 @Module({
   imports: [
@@ -21,7 +23,9 @@ import { SecurityDevicesController } from './api/security-devices.controller';
     UsersQueryRepository,
     SecurityDevicesQueryRepository,
     AuthQueryRepository,
+    UsersExternalQueryRepository,
+    UsersExternalService,
   ],
-  exports: [UsersRepository],
+  exports: [UsersExternalQueryRepository, UsersExternalService],
 })
 export class UserAccountsModule {}

@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { User, UserModelType } from '../domain/user.entity';
 import { CreateUserDto, UpdateUserDto } from '../dto/create-user.dto';
@@ -30,8 +30,6 @@ export class UsersService {
   }
   async updateUser(id: string, dto: UpdateUserDto): Promise<string> {
     const user = await this.usersRepository.findOrNotFoundFail(id);
-
-    console.log('user.id: ' + user.id);
 
     // не присваиваем св-ва сущностям напрямую в сервисах! даже для изменения одного св-ва
     // создаём метод
