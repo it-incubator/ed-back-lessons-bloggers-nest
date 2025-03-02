@@ -3,10 +3,10 @@ import { Inject } from '@nestjs/common';
 import { BlogsQueryRepository } from '../../infrastructure/query/blogs.query-repository';
 import { BlogViewDto } from '../../api/view-dto/blog.view-dto';
 import { Types } from 'mongoose';
-import { UsersRepository } from '@features/user-accounts/infrastructure/users.repository';
 import { BlogsRepository } from '../../infrastructure/blogs.repository';
 import { AgeRestriction } from '../../domain/blog.entity';
 import { ForbiddenDomainException } from '@core/exceptions/domain-exceptions';
+import { UsersExternalQueryRepository } from '@src/features/user-accounts/infrastructure/external-query/users.external-query-repository';
 
 export class GetBlogByIdQuery {
   constructor(
@@ -23,7 +23,7 @@ export class GetBlogByIdQueryHandler
     @Inject(BlogsQueryRepository)
     private readonly blogsQueryRepository: BlogsQueryRepository,
     private readonly blogsRepository: BlogsRepository,
-    private readonly usersRepository: UsersRepository,
+    private readonly usersQueryRepository: UsersExternalQueryRepository,
   ) {}
 
   async execute(query: GetBlogByIdQuery): Promise<BlogViewDto> {
@@ -34,7 +34,9 @@ export class GetBlogByIdQueryHandler
       }
 
       //The user's age can be contained in the token
-      const user = await this.usersRepository.findOrNotFoundFail(query.userId);
+      const user = await this.usersQueryRepository.getByIdOrNotFoundFail(
+        query.userId,
+      );
 
       if (user.age < 18) {
         throw ForbiddenDomainException.create('Too yang');

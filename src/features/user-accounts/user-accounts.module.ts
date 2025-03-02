@@ -28,6 +28,8 @@ import { PaypalService } from '@features/user-accounts/application/paypal.servic
 import { IPaymentStrategy } from '@features/user-accounts/application/payment.strategy.interface';
 import { REQUEST } from '@nestjs/core';
 import { Request } from 'express';
+import { UsersExternalQueryRepository } from './infrastructure/external-query/users.external-query-repository';
+import { UsersExternalService } from './application/users.external-service';
 
 @Module({
   imports: [
@@ -103,7 +105,9 @@ import { Request } from 'express';
     LoginUserUseCase,
     UserAccountsConfig,
     JwtStrategy,
+    UsersExternalQueryRepository,
+    UsersExternalService,
   ],
-  exports: [UsersRepository, JwtStrategy],
+  exports: [JwtStrategy, UsersExternalQueryRepository, UsersExternalService],
 })
 export class UserAccountsModule {}
