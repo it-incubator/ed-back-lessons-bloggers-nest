@@ -22,6 +22,8 @@ import { DeleteUserUseCase } from './application/usecases/delete-user.usecase';
 import { RegisterUserUseCase } from './application/usecases/register-user.usecase';
 import { LoginUserUseCase } from './application/usecases/login-user.usecase';
 import { JwtStrategy } from './guards/bearer/jwt.strategy';
+import { UsersExternalQueryRepository } from './infrastructure/external-query/users.external-query-repository';
+import { UsersExternalService } from './application/users.external-service';
 
 @Module({
   imports: [
@@ -80,7 +82,9 @@ import { JwtStrategy } from './guards/bearer/jwt.strategy';
     CryptoService,
     LoginUserUseCase,
     JwtStrategy,
+    UsersExternalQueryRepository,
+    UsersExternalService,
   ],
-  exports: [UsersRepository, JwtStrategy],
+  exports: [JwtStrategy, UsersExternalQueryRepository, UsersExternalService],
 })
 export class UserAccountsModule {}

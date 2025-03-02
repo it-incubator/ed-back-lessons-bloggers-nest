@@ -148,8 +148,8 @@ export class User {
   update(dto: UpdateUserDto) {
     if (dto.email !== this.email) {
       this.isEmailConfirmed = false;
+      this.email = dto.email;
     }
-    this.email = dto.email;
   }
 }
 
