@@ -9,6 +9,8 @@ import { AuthController } from './api/auth.controller';
 import { SecurityDevicesQueryRepository } from './infrastructure/query/security-devices.query-repository';
 import { AuthQueryRepository } from './infrastructure/query/auth.query-repository';
 import { SecurityDevicesController } from './api/security-devices.controller';
+import { UsersExternalQueryRepository } from './infrastructure/external-query/users.external-query-repository';
+import { UsersExternalService } from './application/users.external-service';
 import { LoginIsExistConstraint } from './api/validation/login-is-exist.decorator';
 import { NotificationsModule } from '../notifications/notifications.module';
 import { AuthService } from './application/auth.service';
@@ -43,7 +45,9 @@ import { JwtStrategy } from './guards/bearer/jwt.strategy';
     LocalStrategy,
     CryptoService,
     JwtStrategy,
+    UsersExternalQueryRepository,
+    UsersExternalService,
   ],
-  exports: [UsersRepository, JwtStrategy],
+  exports: [JwtStrategy, UsersExternalQueryRepository, UsersExternalService],
 })
 export class UserAccountsModule {}
