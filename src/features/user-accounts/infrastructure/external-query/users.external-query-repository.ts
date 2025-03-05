@@ -1,7 +1,7 @@
 import { User, UserModelType } from '../../domain/user.entity';
 import { InjectModel } from '@nestjs/mongoose';
-import { UserViewDto } from '../../api/view-dto/users.view-dto';
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { UserExternalDto } from './external-dto/users.external-dto';
 
 @Injectable()
 export class UsersExternalQueryRepository {
@@ -10,7 +10,7 @@ export class UsersExternalQueryRepository {
     private UserModel: UserModelType,
   ) {}
 
-  async getByIdOrNotFoundFail(id: string): Promise<UserViewDto> {
+  async getByIdOrNotFoundFail(id: string): Promise<UserExternalDto> {
     const user = await this.UserModel.findOne({
       _id: id,
       deletedAt: null,
@@ -20,6 +20,6 @@ export class UsersExternalQueryRepository {
       throw new NotFoundException('user not found');
     }
 
-    return UserViewDto.mapToView(user);
+    return UserExternalDto.mapToView(user);
   }
 }
