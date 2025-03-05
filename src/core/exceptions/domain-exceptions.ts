@@ -22,6 +22,11 @@ export class BadRequestDomainException extends DomainException {
     super('Bad Request', DomainExceptionCode.BadRequest, extensions);
   }
 
+  /**
+   * To create the most common exception with one extension or without one
+   * @param message
+   * @param key
+   */
   static create(message?: string, key?: string) {
     return new this(message ? [new ErrorExtension(message, key)] : []);
   }
@@ -32,6 +37,11 @@ export class ForbiddenDomainException extends DomainException {
     super('Forbidden', DomainExceptionCode.Forbidden, extensions);
   }
 
+  /**
+   * To create the most common exception with one extension or without one
+   * @param message
+   * @param key
+   */
   static create(message?: string, key?: string) {
     return new this(message ? [new ErrorExtension(message, key)] : []);
   }
@@ -42,6 +52,11 @@ export class UnauthorizedDomainException extends DomainException {
     super('Unauthorized', DomainExceptionCode.Unauthorized, extensions);
   }
 
+  /**
+   * To create the most common exception with one extension or without one
+   * @param message
+   * @param key
+   */
   static create(message?: string, key?: string) {
     return new this(message ? [new ErrorExtension(message, key)] : []);
   }
@@ -52,6 +67,11 @@ export class NotFoundDomainException extends DomainException {
     super('Not Found', DomainExceptionCode.NotFound, extensions);
   }
 
+  /**
+   * To create the most common exception with one extension or without one
+   * @param message
+   * @param key
+   */
   static create(message?: string, key?: string) {
     return new this(message ? [new ErrorExtension(message, key)] : []);
   }
