@@ -17,13 +17,22 @@ import {
   ACCESS_TOKEN_STRATEGY_INJECT_TOKEN,
   REFRESH_TOKEN_STRATEGY_INJECT_TOKEN,
 } from './constants/auth-tokens.inject-constants';
-import { CreateUserUseCase } from './application/usecases/create-user.usecase';
-import { DeleteUserUseCase } from './application/usecases/delete-user.usecase';
-import { RegisterUserUseCase } from './application/usecases/register-user.usecase';
+import { CreateUserUseCase } from './application/usecases/admins/create-user.usecase';
+import { DeleteUserUseCase } from './application/usecases/admins/delete-user.usecase';
+import { RegisterUserUseCase } from './application/usecases/users/register-user.usecase';
 import { LoginUserUseCase } from './application/usecases/login-user.usecase';
 import { JwtStrategy } from './guards/bearer/jwt.strategy';
 import { UsersExternalQueryRepository } from './infrastructure/external-query/users.external-query-repository';
 import { UsersExternalService } from './application/users.external-service';
+import { GetUserByIdQueryHandler } from './application/queries/get-user-by-id.query';
+
+const commandHandlers = [
+  DeleteUserUseCase,
+  RegisterUserUseCase,
+  CreateUserUseCase,
+];
+
+const queryHandlers = [GetUserByIdQueryHandler];
 
 @Module({
   imports: [
@@ -32,11 +41,10 @@ import { UsersExternalService } from './application/users.external-service';
   ],
   controllers: [UsersController, AuthController, SecurityDevicesController],
   providers: [
+    ...commandHandlers,
+    ...queryHandlers,
     //варианты регистрации провайдеров
     UsersRepository,
-    DeleteUserUseCase,
-    RegisterUserUseCase,
-    CreateUserUseCase,
     {
       provide: AuthService,
       //вмешиваемся в процесс и вручную инстанцируем класс

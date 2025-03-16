@@ -20,11 +20,12 @@ import { UpdateUserInputDto } from './input-dto/update-user.input-dto';
 import { GetUsersQueryParams } from './input-dto/get-users-query-params.input-dto';
 import { BasicAuthGuard } from '../guards/basic/basic-auth.guard';
 import { Types } from 'mongoose';
-import { CommandBus } from '@nestjs/cqrs';
-import { CreateUserCommand } from '../application/usecases/create-user.usecase';
-import { DeleteUserCommand } from '../application/usecases/delete-user.usecase';
+import { CommandBus, QueryBus } from '@nestjs/cqrs';
+import { CreateUserCommand } from '../application/usecases/admins/create-user.usecase';
+import { DeleteUserCommand } from '../application/usecases/admins/delete-user.usecase';
 import { UpdateUserCommand } from '../application/usecases/update-user.usecase';
 import { Public } from '../guards/decorators/public.decorator';
+import { GetUserByIdQuery } from '../application/queries/get-user-by-id.query';
 
 @Controller('users')
 @UseGuards(BasicAuthGuard)
@@ -33,12 +34,15 @@ export class UsersController {
   constructor(
     private usersQueryRepository: UsersQueryRepository,
     private readonly commandBus: CommandBus,
-  ) {}
+    private readonly queryBus: QueryBus,
+  ) {
+    console.log('UsersController created');
+  }
 
   @ApiParam({ name: 'id' }) //для сваггера
   @Get(':id')
   async getById(@Param('id') id: Types.ObjectId): Promise<UserViewDto> {
-    return this.usersQueryRepository.getByIdOrNotFoundFail(id);
+    return this.queryBus.execute(new GetUserByIdQuery(id));
   }
 
   @Public()

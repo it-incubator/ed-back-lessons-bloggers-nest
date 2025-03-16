@@ -16,7 +16,7 @@ import { MeViewDto } from './view-dto/users.view-dto';
 import { JwtAuthGuard } from '../guards/bearer/jwt-auth.guard';
 import { CommandBus } from '@nestjs/cqrs';
 import { CreateUserInputDto } from './input-dto/users.input-dto';
-import { RegisterUserCommand } from '../application/usecases/register-user.usecase';
+import { RegisterUserCommand } from '../application/usecases/users/register-user.usecase';
 import { AuthQueryRepository } from '../infrastructure/query/auth.query-repository';
 import { LoginUserCommand } from '../application/usecases/login-user.usecase';
 import { JwtOptionalAuthGuard } from '../guards/bearer/jwt-optional-auth.guard';

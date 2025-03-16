@@ -4,16 +4,19 @@ import {
   EventBus,
   ICommandHandler,
 } from '@nestjs/cqrs';
-import { CreateUserDto } from '../../dto/create-user.dto';
-import { CreateUserCommand } from './create-user.usecase';
-import { UserRegisteredEvent } from '../../domain/events/user-registered.event';
-import { UsersRepository } from '../../infrastructure/users.repository';
+import { CreateUserDto } from '../../../dto/create-user.dto';
 import { Types } from 'mongoose';
+import { CreateUserCommand } from '../admins/create-user.usecase';
+import { UsersRepository } from '../../../infrastructure/users.repository';
+import { UserRegisteredEvent } from '../../../domain/events/user-registered.event';
 
 export class RegisterUserCommand {
   constructor(public dto: CreateUserDto) {}
 }
 
+/**
+ * Регистрация пользователя через email на странице регистрации сайта
+ */
 @CommandHandler(RegisterUserCommand)
 export class RegisterUserUseCase
   implements ICommandHandler<RegisterUserCommand>
@@ -38,5 +41,6 @@ export class RegisterUserUseCase
     await this.usersRepository.save(user);
 
     this.eventBus.publish(new UserRegisteredEvent(user.email, confirmCode));
+    return;
   }
 }
