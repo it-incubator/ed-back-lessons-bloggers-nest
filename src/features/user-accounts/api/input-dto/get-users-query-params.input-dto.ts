@@ -1,9 +1,10 @@
 //dto для запроса списка юзеров с пагинацией, сортировкой, фильтрами
-import { BaseSortablePaginationParams } from '../../../../core/dto/base.query-params.input-dto';
 import { UsersSortBy } from './users-sort-by';
+import { BaseQueryParams } from '../../../../core/dto/base.query-params.input-dto';
 import { IsEnum, IsOptional, IsString } from 'class-validator';
 
-export class GetUsersQueryParams extends BaseSortablePaginationParams<UsersSortBy> {
+//наследуемся от класса BaseQueryParams, где уже есть pageNumber, pageSize и т.п., чтобы не дублировать эти свойства
+export class GetUsersQueryParams extends BaseQueryParams {
   @IsEnum(UsersSortBy)
   sortBy = UsersSortBy.CreatedAt;
   @IsString()
