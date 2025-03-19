@@ -51,6 +51,15 @@ export class CoreConfig {
     this.configService.get('INCLUDE_TESTING_MODULE'),
   ) as boolean;
 
+  @IsBoolean({
+    message:
+      'Set Env variable SEND_INTERNAL_SERVER_ERROR_MESSAGE to enable/disable Dangerous for production internal server error details (message, etc), example: true, available values: true, false, 0, 1',
+  })
+  sendInternalServerErrorDetails: boolean =
+    configValidationUtility.convertToBoolean(
+      this.configService.get('SEND_INTERNAL_SERVER_ERROR_DETAILS'),
+    ) as boolean;
+
   constructor(private configService: ConfigService<any, true>) {
     configValidationUtility.validateConfig(this);
   }
