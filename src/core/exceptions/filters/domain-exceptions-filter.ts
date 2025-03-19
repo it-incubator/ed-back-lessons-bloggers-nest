@@ -1,17 +1,31 @@
-//Ошибки класса DomainException (instanceof DomainException)
-import { Catch, HttpStatus } from '@nestjs/common';
-import { DomainException } from '../domain-exceptions';
 import {
-  BaseHttpExceptionFilter,
-  HttpResponseBody,
-} from './base-exception-filter';
-import { Request } from 'express';
+  ArgumentsHost,
+  Catch,
+  ExceptionFilter,
+  HttpStatus,
+} from '@nestjs/common';
+import { DomainException } from '../domain-exceptions';
+import { Request, Response } from 'express';
 import { DomainExceptionCode } from '../domain-exception-codes';
+import { ErrorResponseBody } from './error-response-body.type';
 
+//https://docs.nestjs.com/exception-filters#exception-filters-1
+//Ошибки класса DomainException (instanceof DomainException)
 @Catch(DomainException)
-export class DomainHttpExceptionsFilter extends BaseHttpExceptionFilter<DomainException> {
-  getStatus(exception: DomainException): number {
-    switch (exception.code) {
+export class DomainHttpExceptionsFilter implements ExceptionFilter {
+  catch(exception: DomainException, host: ArgumentsHost): void {
+    const ctx = host.switchToHttp();
+    const response = ctx.getResponse<Response>();
+    const request = ctx.getRequest<Request>();
+
+    const status = this.mapToHttpStatus(exception.code);
+    const responseBody = this.buildResponseBody(exception, request.url);
+
+    response.status(status).json(responseBody);
+  }
+
+  private mapToHttpStatus(code: DomainExceptionCode): number {
+    switch (code) {
       case DomainExceptionCode.BadRequest:
         return HttpStatus.BAD_REQUEST;
       case DomainExceptionCode.Forbidden:
@@ -25,13 +39,13 @@ export class DomainHttpExceptionsFilter extends BaseHttpExceptionFilter<DomainEx
     }
   }
 
-  getResponseBody(
+  private buildResponseBody(
     exception: DomainException,
-    request: Request,
-  ): HttpResponseBody {
+    requestUrl: string,
+  ): ErrorResponseBody {
     return {
       timestamp: new Date().toISOString(),
-      path: request.url,
+      path: requestUrl,
       message: exception.message,
       code: exception.code,
       extensions: exception.extensions,

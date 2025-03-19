@@ -1,14 +1,30 @@
-//Все ошибки
-import { Catch, HttpException, HttpStatus } from '@nestjs/common';
 import {
-  BaseHttpExceptionFilter,
-  HttpResponseBody,
-} from './base-exception-filter';
-import { Request } from 'express';
+  ArgumentsHost,
+  Catch,
+  ExceptionFilter,
+  HttpException,
+  HttpStatus,
+} from '@nestjs/common';
+import { Request, Response } from 'express';
+import { ErrorResponseBody } from './error-response-body.type';
 
+//https://docs.nestjs.com/exception-filters#exception-filters-1
+//Все ошибки
 @Catch()
-export class AllHttpExceptionsFilter extends BaseHttpExceptionFilter<unknown> {
-  getStatus(exception: unknown): number {
+export class AllHttpExceptionsFilter implements ExceptionFilter {
+  catch(exception: unknown, host: ArgumentsHost): void {
+    const ctx = host.switchToHttp();
+    const response = ctx.getResponse<Response>();
+    const request = ctx.getRequest<Request>();
+
+    const status = this.resolveHttpStatus(exception);
+    const message = this.extractMessage(exception);
+    const responseBody = this.buildResponseBody(status, request.url, message);
+
+    response.status(status).json(responseBody);
+  }
+
+  private resolveHttpStatus(exception: unknown): number {
     //хотя мы используем кастомные domain exception,
     //NestJs все еще может выбросить стандартное http исключение в определенных сценариях
     //например, если мы не переопределили поведение passport strategy
@@ -17,10 +33,13 @@ export class AllHttpExceptionsFilter extends BaseHttpExceptionFilter<unknown> {
       : HttpStatus.INTERNAL_SERVER_ERROR;
   }
 
-  getResponseBody(exception: unknown, request: Request): HttpResponseBody {
+  private buildResponseBody(
+    status: number,
+    requestUrl: string,
+    message: string,
+  ): ErrorResponseBody {
     //TODO: Replace with getter from configService. will be in the following lessons
     const isProduction = process.env.NODE_ENV === 'production';
-    const status = this.getStatus(exception);
 
     if (isProduction && status === HttpStatus.INTERNAL_SERVER_ERROR) {
       return {
@@ -34,13 +53,18 @@ export class AllHttpExceptionsFilter extends BaseHttpExceptionFilter<unknown> {
 
     return {
       timestamp: new Date().toISOString(),
-      path: request.url,
-      message:
-        exception instanceof Error
-          ? exception.message
-          : 'Internal server error',
+      path: requestUrl,
+      message,
       extensions: [],
       code: null,
     };
+  }
+
+  private extractMessage(exception: unknown): string {
+    const UNKNOWN_ERROR_MESSAGE = 'Internal server unknown error';
+    if (exception instanceof Error) {
+      return exception.message || UNKNOWN_ERROR_MESSAGE;
+    }
+    return UNKNOWN_ERROR_MESSAGE;
   }
 }
