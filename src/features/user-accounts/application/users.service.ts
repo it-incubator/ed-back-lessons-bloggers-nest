@@ -5,8 +5,9 @@ import { CreateUserDto, UpdateUserDto } from '../dto/create-user.dto';
 import { UsersRepository } from '../infrastructure/users.repository';
 import { EmailService } from '../../notifications/email.service';
 import { CryptoService } from './crypto.service';
-import { BadRequestDomainException } from '../../../core/exceptions/domain-exceptions';
+import { DomainException } from '../../../core/exceptions/domain-exceptions';
 import { Types } from 'mongoose';
+import { DomainExceptionCode } from '../../../core/exceptions/domain-exception-codes';
 
 @Injectable()
 export class UsersService {
@@ -24,9 +25,10 @@ export class UsersService {
       dto.login,
     );
     if (!!userWithTheSameLogin) {
-      throw BadRequestDomainException.create(
-        'User with the same login already exists',
-      );
+      throw new DomainException({
+        code: DomainExceptionCode.BadRequest,
+        message: 'User with the same login already exists',
+      });
     }
 
     const passwordHash = await this.cryptoService.createPasswordHash(

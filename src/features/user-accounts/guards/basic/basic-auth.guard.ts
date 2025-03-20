@@ -1,8 +1,9 @@
 import { CanActivate, ExecutionContext, Injectable } from '@nestjs/common';
 import { Request } from 'express';
-import { UnauthorizedDomainException } from '../../../../core/exceptions/domain-exceptions';
+import { DomainException } from '../../../../core/exceptions/domain-exceptions';
 import { Reflector } from '@nestjs/core';
 import { IS_PUBLIC_KEY } from '../decorators/public.decorator';
+import { DomainExceptionCode } from '../../../../core/exceptions/domain-exception-codes';
 
 @Injectable()
 export class BasicAuthGuard implements CanActivate {
@@ -25,7 +26,10 @@ export class BasicAuthGuard implements CanActivate {
     }
 
     if (!authHeader || !authHeader.startsWith('Basic ')) {
-      throw UnauthorizedDomainException.create();
+      throw new DomainException({
+        code: DomainExceptionCode.Unauthorized,
+        message: 'unauthorised',
+      });
     }
 
     const base64Credentials = authHeader.split(' ')[1];
@@ -37,7 +41,10 @@ export class BasicAuthGuard implements CanActivate {
     if (username === this.validUsername && password === this.validPassword) {
       return true;
     } else {
-      throw UnauthorizedDomainException.create();
+      throw new DomainException({
+        code: DomainExceptionCode.Unauthorized,
+        message: 'unauthorised',
+      });
     }
   }
 }

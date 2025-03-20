@@ -1,11 +1,14 @@
-import { INestApplication, ValidationPipe } from '@nestjs/common';
-
-import { ValidationError } from '@nestjs/common';
 import {
-  BadRequestDomainException,
-  ErrorExtension,
+  INestApplication,
+  ValidationError,
+  ValidationPipe,
+} from '@nestjs/common';
+import {
+  DomainException,
+  Extension,
 } from '../core/exceptions/domain-exceptions';
 import { ObjectIdValidationTransformationPipe } from '../core/pipes/object-id-validation-transformation-pipe.service';
+import { DomainExceptionCode } from '../core/exceptions/domain-exception-codes';
 
 //функция использует рекурсию для обхода объекта children при вложенных полях при валидации
 //поставьте логи и разберитесь как она работает
@@ -13,7 +16,7 @@ import { ObjectIdValidationTransformationPipe } from '../core/pipes/object-id-va
 export const errorFormatter = (
   errors: ValidationError[],
   errorMessage?: any,
-): ErrorExtension[] => {
+): Extension[] => {
   const errorsForResponse = errorMessage || [];
 
   for (const error of errors) {
@@ -51,7 +54,11 @@ export function pipesSetup(app: INestApplication) {
       exceptionFactory: (errors) => {
         const formattedErrors = errorFormatter(errors);
 
-        throw new BadRequestDomainException(formattedErrors);
+        throw new DomainException({
+          code: DomainExceptionCode.ValidationError,
+          message: 'Validation failed',
+          extensions: formattedErrors,
+        });
       },
     }),
   );
