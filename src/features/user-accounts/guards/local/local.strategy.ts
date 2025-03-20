@@ -2,8 +2,9 @@ import { Strategy } from 'passport-local';
 import { PassportStrategy } from '@nestjs/passport';
 import { Injectable } from '@nestjs/common';
 import { AuthService } from '../../application/auth.service';
-import { UnauthorizedDomainException } from '../../../../core/exceptions/domain-exceptions';
+import { DomainException } from '../../../../core/exceptions/domain-exceptions';
 import { UserContextDto } from '../dto/user-context.dto';
+import { DomainExceptionCode } from '../../../../core/exceptions/domain-exception-codes';
 
 @Injectable()
 export class LocalStrategy extends PassportStrategy(Strategy) {
@@ -19,7 +20,10 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
     // }
     const user = await this.authService.validateUser(username, password);
     if (!user) {
-      throw UnauthorizedDomainException.create();
+      throw new DomainException({
+        code: DomainExceptionCode.Unauthorized,
+        message: 'Invalid username or password',
+      });
     }
 
     return user;

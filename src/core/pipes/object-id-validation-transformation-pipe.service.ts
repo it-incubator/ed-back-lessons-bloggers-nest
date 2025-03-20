@@ -1,6 +1,7 @@
 import { ArgumentMetadata, Injectable, PipeTransform } from '@nestjs/common';
 import { isValidObjectId, Types } from 'mongoose';
-import { BadRequestDomainException } from '../exceptions/domain-exceptions';
+import { DomainException } from '../exceptions/domain-exceptions';
+import { DomainExceptionCode } from '../exceptions/domain-exception-codes';
 
 // Custom pipe example
 // https://docs.nestjs.com/pipes#custom-pipes
@@ -13,7 +14,11 @@ export class ObjectIdValidationTransformationPipe implements PipeTransform {
     }
 
     if (!isValidObjectId(value)) {
-      throw BadRequestDomainException.create(`Invalid ObjectId: ${value}`);
+      throw new DomainException({
+        code: DomainExceptionCode.ValidationError,
+        message: `Validation failedr`,
+        extensions: [{ key: null, message: `Invalid ObjectId: ${value}` }],
+      });
     }
     return new Types.ObjectId(value); // Преобразуем строку в ObjectId
 
@@ -30,7 +35,11 @@ export class ObjectIdValidationPipe implements PipeTransform {
     // Проверяем, что тип данных в декораторе — ObjectId
 
     if (!isValidObjectId(value)) {
-      throw BadRequestDomainException.create(`Invalid ObjectId: ${value}`);
+      throw new DomainException({
+        code: DomainExceptionCode.ValidationError,
+        message: `Validation failed`,
+        extensions: [{ key: null, message: `Invalid ObjectId: ${value}` }],
+      });
     }
 
     // Если тип не ObjectId, возвращаем значение без изменений
