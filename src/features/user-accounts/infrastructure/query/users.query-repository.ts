@@ -6,7 +6,8 @@ import { Injectable } from '@nestjs/common';
 import { FilterQuery, Types } from 'mongoose';
 import { PaginatedViewDto } from '../../../../core/dto/base.paginated.view-dto';
 import { GetUsersQueryParams } from '../../api/input-dto/get-users-query-params.input-dto';
-import { NotFoundDomainException } from '../../../../core/exceptions/domain-exceptions';
+import { DomainException } from '../../../../core/exceptions/domain-exceptions';
+import { DomainExceptionCode } from '../../../../core/exceptions/domain-exception-codes';
 
 //для примера интерфейса для репозитория
 export interface IQueryRepository<TEntity, TQuery> {
@@ -30,7 +31,10 @@ export class UsersQueryRepository
     });
 
     if (!user) {
-      throw NotFoundDomainException.create('user not found');
+      throw new DomainException({
+        code: DomainExceptionCode.NotFound,
+        message: 'user not found',
+      });
     }
 
     return UserViewDto.mapToView(user);

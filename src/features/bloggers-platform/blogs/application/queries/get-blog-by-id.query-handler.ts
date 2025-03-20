@@ -5,8 +5,9 @@ import { BlogViewDto } from '../../api/view-dto/blog.view-dto';
 import { Types } from 'mongoose';
 import { BlogsRepository } from '../../infrastructure/blogs.repository';
 import { AgeRestriction } from '../../domain/blog.entity';
-import { ForbiddenDomainException } from '../../../../../core/exceptions/domain-exceptions';
 import { UsersExternalQueryRepository } from '../../../../user-accounts/infrastructure/external-query/users.external-query-repository';
+import { DomainException } from '../../../../../core/exceptions/domain-exceptions';
+import { DomainExceptionCode } from '../../../../../core/exceptions/domain-exception-codes';
 
 export class GetBlogByIdQuery {
   constructor(
@@ -30,7 +31,10 @@ export class GetBlogByIdQueryHandler
     const blog = await this.blogsRepository.findOrNotFoundFail(query.id);
     if (blog.ageRestriction === AgeRestriction.Age18Plus) {
       if (!query.userId) {
-        throw ForbiddenDomainException.create('Too yang');
+        throw new DomainException({
+          code: DomainExceptionCode.Forbidden,
+          message: 'Too yang',
+        });
       }
 
       //The user's age can be contained in the token
@@ -39,7 +43,10 @@ export class GetBlogByIdQueryHandler
       );
 
       if (user.age < 18) {
-        throw ForbiddenDomainException.create('Too yang');
+        throw new DomainException({
+          code: DomainExceptionCode.Forbidden,
+          message: 'Too yang',
+        });
       }
     }
 
