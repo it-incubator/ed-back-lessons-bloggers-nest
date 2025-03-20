@@ -7,6 +7,7 @@ import {
 } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { ErrorResponseBody } from './error-response-body.type';
+import { DomainExceptionCode } from '../domain-exception-codes';
 
 //https://docs.nestjs.com/exception-filters#exception-filters-1
 //Все ошибки
@@ -47,16 +48,16 @@ export class AllHttpExceptionsFilter implements ExceptionFilter {
         path: null,
         message: 'Some error occurred',
         extensions: [],
-        code: null,
+        code: DomainExceptionCode.InternalServerError,
       };
     }
 
     return {
       timestamp: new Date().toISOString(),
       path: requestUrl,
-      message,
-      extensions: [],
-      code: null,
+      message: 'Internal server error',
+      extensions: [{ key: null, message }],
+      code: DomainExceptionCode.InternalServerError,
     };
   }
 
