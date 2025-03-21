@@ -6,5 +6,5 @@ export type ErrorResponseBody = {
   path: string | null;
   message: string;
   extensions: Extension[];
-  code: DomainExceptionCode | null;
+  code: DomainExceptionCode;
 };
