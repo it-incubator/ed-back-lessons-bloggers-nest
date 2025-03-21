@@ -60,8 +60,8 @@ export class AllHttpExceptionsFilter implements ExceptionFilter {
     return {
       timestamp: new Date().toISOString(),
       path: requestUrl,
-      message: 'Internal server error',
-      extensions: [{ key: null, message }],
+      message,
+      extensions: [],
       code: DomainExceptionCode.InternalServerError,
     };
   }
