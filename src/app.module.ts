@@ -7,8 +7,8 @@ import { TestingModule } from './features/testing/testing.module';
 import { BloggersPlatformModule } from './features/bloggers-platform/bloggers-platform.module';
 import { CoreModule } from './core/core.module';
 import { APP_FILTER } from '@nestjs/core';
-import { AllHttpExceptionsFilter } from './core/exceptions/filters/all-exceptions-filter';
-import { DomainHttpExceptionsFilter } from './core/exceptions/filters/domain-exceptions-filter';
+import { AllHttpExceptionsFilter } from './core/exceptions/filters/all-exceptions.filter';
+import { DomainHttpExceptionsFilter } from './core/exceptions/filters/domain-exceptions.filter';
 
 @Module({
   imports: [
