@@ -8,8 +8,8 @@ import { BloggersPlatformModule } from './features/bloggers-platform/bloggers-pl
 import { CoreModule } from './core/core.module';
 import { NotificationsModule } from './features/notifications/notifications.module';
 import { APP_FILTER } from '@nestjs/core';
-import { AllHttpExceptionsFilter } from './core/exceptions/filters/all-exceptions-filter';
-import { DomainHttpExceptionsFilter } from './core/exceptions/filters/domain-exceptions-filter';
+import { AllHttpExceptionsFilter } from './core/exceptions/filters/all-exceptions.filter';
+import { DomainHttpExceptionsFilter } from './core/exceptions/filters/domain-exceptions.filter';
 
 @Module({
   imports: [
