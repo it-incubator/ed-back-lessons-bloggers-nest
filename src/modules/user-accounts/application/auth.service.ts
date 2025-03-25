@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { UsersRepository } from '../infrastructure/users.repository';
-import { DomainException } from '../../../core/exceptions/domain-exceptions';
+import { DomainException } from '@core/exceptions/domain-exceptions';
 import { UserContextDto } from '../guards/dto/user-context.dto';
 import { CryptoService } from './crypto.service';
-import { DomainExceptionCode } from '../../../core/exceptions/domain-exception-codes';
+import { DomainExceptionCode } from '@core/exceptions/domain-exception-codes';
 
 @Injectable()
 export class AuthService {
