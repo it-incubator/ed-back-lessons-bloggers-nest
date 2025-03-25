@@ -5,7 +5,7 @@ import { AppModule } from '../../src/app.module';
 import { appSetup } from '../../src/setup/app.setup';
 import { UsersTestManager } from './users-test-manager';
 import { deleteAllData } from './delete-all-data';
-import { EmailService } from '../../src/features/notifications/email.service';
+import { EmailService } from '../../src/modules/notifications/email.service';
 import { EmailServiceMock } from '../mock/email-service.mock';
 
 export const initSettings = async (
