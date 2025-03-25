@@ -26,7 +26,7 @@ import { CreateUserCommand } from '../application/usecases/create-user.usecase';
 import { DeleteUserCommand } from '../application/usecases/delete-user.usecase';
 import { UpdateUserCommand } from '../application/usecases/update-user.usecase';
 import { Public } from '../guards/decorators/public.decorator';
-import { IPaymentStrategy } from '@features/user-accounts/application/payment.strategy.interface';
+import { IPaymentStrategy } from '@src/modules/user-accounts/application/payment.strategy.interface';
 
 @Controller({
   path: 'users',

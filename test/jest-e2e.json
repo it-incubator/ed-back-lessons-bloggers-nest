@@ -8,7 +8,7 @@
   },
   "moduleNameMapper": {
     "^@src/(.*)$": "<rootDir>/src/$1",
-    "^@features/(.*)$": "<rootDir>/src/features/$1",
+    "^@modles/(.*)$": "<rootDir>/src/modules/$1",
     "^@core/(.*)$": "<rootDir>/src/core/$1"
   }
 }

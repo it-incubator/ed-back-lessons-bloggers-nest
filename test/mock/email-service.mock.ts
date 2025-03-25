@@ -1,4 +1,4 @@
-import { EmailService } from '@features/notifications/email.service';
+import { EmailService } from '@src/modules/notifications/email.service';
 
 export class EmailServiceMock extends EmailService {
   //override method

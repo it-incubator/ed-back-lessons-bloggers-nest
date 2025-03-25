@@ -53,7 +53,7 @@ export class CoreConfig {
 
   @IsBoolean({
     message:
-      'Set Env variable SEND_INTERNAL_SERVER_ERROR_MESSAGE to enable/disable Dangerous for production internal server error details (message, etc), example: true, available values: true, false, 0, 1',
+      'Set Env variable SEND_INTERNAL_SERVER_ERROR_DETAILS to enable/disable Dangerous for production internal server error details (message, etc), example: true, available values: true, false, 0, 1',
   })
   sendInternalServerErrorDetails: boolean =
     configValidationUtility.convertToBoolean(

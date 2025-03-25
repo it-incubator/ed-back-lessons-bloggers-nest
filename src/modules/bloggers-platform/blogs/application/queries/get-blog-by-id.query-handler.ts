@@ -7,7 +7,7 @@ import { BlogsRepository } from '../../infrastructure/blogs.repository';
 import { AgeRestriction } from '../../domain/blog.entity';
 import { DomainException } from '@core/exceptions/domain-exceptions';
 import { DomainExceptionCode } from '@core/exceptions/domain-exception-codes';
-import { UsersExternalQueryRepository } from '@src/features/user-accounts/infrastructure/external-query/users.external-query-repository';
+import { UsersExternalQueryRepository } from '@src/modules/user-accounts/infrastructure/external-query/users.external-query-repository';
 
 export class GetBlogByIdQuery {
   constructor(

@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { IPaymentStrategy } from '@features/user-accounts/application/payment.strategy.interface';
+import { IPaymentStrategy } from '@src/modules/user-accounts/application/payment.strategy.interface';
 
 @Injectable()
 export class PaypalService extends IPaymentStrategy {
