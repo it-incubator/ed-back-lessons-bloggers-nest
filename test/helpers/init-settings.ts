@@ -4,7 +4,7 @@ import { Connection } from 'mongoose';
 import { appSetup } from '../../src/setup/app.setup';
 import { UsersTestManager } from './users-test-manager';
 import { deleteAllData } from './delete-all-data';
-import { EmailService } from '../../src/features/notifications/email.service';
+import { EmailService } from '../../src/modules/notifications/email.service';
 import { EmailServiceMock } from '../mock/email-service.mock';
 import { AppModule } from '../../src/app.module';
 

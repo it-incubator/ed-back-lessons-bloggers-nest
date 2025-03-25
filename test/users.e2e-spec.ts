@@ -2,18 +2,18 @@ import { HttpStatus, INestApplication } from '@nestjs/common';
 import request from 'supertest';
 import { UsersTestManager } from './helpers/users-test-manager';
 import { initSettings } from './helpers/init-settings';
-import { CreateUserDto } from '../src/features/user-accounts/dto/create-user.dto';
+import { CreateUserDto } from '../src/modules/user-accounts/dto/create-user.dto';
 import { deleteAllData } from './helpers/delete-all-data';
 import { PaginatedViewDto } from '../src/core/dto/base.paginated.view-dto';
 import {
   MeViewDto,
   UserViewDto,
-} from '../src/features/user-accounts/api/view-dto/users.view-dto';
+} from '../src/modules/user-accounts/api/view-dto/users.view-dto';
 import { GLOBAL_PREFIX } from '../src/setup/global-prefix.setup';
 import { JwtService } from '@nestjs/jwt';
 import { delay } from './helpers/delay';
-import { EmailService } from '../src/features/notifications/email.service';
-import { ACCESS_TOKEN_STRATEGY_INJECT_TOKEN } from '../src/features/user-accounts/constants/auth-tokens.inject-constants';
+import { EmailService } from '../src/modules/notifications/email.service';
+import { ACCESS_TOKEN_STRATEGY_INJECT_TOKEN } from '../src/modules/user-accounts/constants/auth-tokens.inject-constants';
 
 describe('users', () => {
   let app: INestApplication;

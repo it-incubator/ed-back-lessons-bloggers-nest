@@ -4,9 +4,9 @@ import { Types } from 'mongoose';
 import {
   User,
   UserModelType,
-} from 'src/features/user-accounts/domain/user.entity';
-import { CreateUserDto } from 'src/features/user-accounts/dto/create-user.dto';
-import { UsersRepository } from 'src/features/user-accounts/infrastructure/users.repository';
+} from 'src/modules/user-accounts/domain/user.entity';
+import { CreateUserDto } from 'src/modules/user-accounts/dto/create-user.dto';
+import { UsersRepository } from 'src/modules/user-accounts/infrastructure/users.repository';
 import { CryptoService } from '../../crypto.service';
 
 export class CreateUserCommand {

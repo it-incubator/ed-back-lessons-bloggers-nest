@@ -1,12 +1,12 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { UserAccountsModule } from './features/user-accounts/user-accounts.module';
+import { UserAccountsModule } from './modules/user-accounts/user-accounts.module';
 import { MongooseModule } from '@nestjs/mongoose';
-import { TestingModule } from './features/testing/testing.module';
-import { BloggersPlatformModule } from './features/bloggers-platform/bloggers-platform.module';
+import { TestingModule } from './modules/testing/testing.module';
+import { BloggersPlatformModule } from './modules/bloggers-platform/bloggers-platform.module';
 import { CoreModule } from './core/core.module';
-import { NotificationsModule } from './features/notifications/notifications.module';
+import { NotificationsModule } from './modules/notifications/notifications.module';
 import { APP_FILTER } from '@nestjs/core';
 import { AllHttpExceptionsFilter } from './core/exceptions/filters/all-exceptions.filter';
 import { DomainHttpExceptionsFilter } from './core/exceptions/filters/domain-exceptions.filter';

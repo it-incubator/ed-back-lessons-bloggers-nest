@@ -53,7 +53,7 @@ const fileTemplates = {
 };
 
 // Создание файлов и директорий
-function createFeature(name, baseDir = 'src/features') {
+function createFeature(name, baseDir = 'src/modules') {
   const featureDir = path.join(baseDir, name);
   structure.forEach((relativePath) => {
     const processedPath = relativePath
