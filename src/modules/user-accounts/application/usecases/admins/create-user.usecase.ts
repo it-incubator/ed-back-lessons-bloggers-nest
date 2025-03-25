@@ -1,13 +1,10 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { InjectModel } from '@nestjs/mongoose';
 import { Types } from 'mongoose';
-import {
-  User,
-  UserModelType,
-} from 'src/modules/user-accounts/domain/user.entity';
-import { CreateUserDto } from 'src/modules/user-accounts/dto/create-user.dto';
-import { UsersRepository } from 'src/modules/user-accounts/infrastructure/users.repository';
 import { CryptoService } from '../../crypto.service';
+import { CreateUserDto } from '../../../dto/create-user.dto';
+import { User, UserModelType } from '../../../domain/user.entity';
+import { UsersRepository } from '../../../infrastructure/users.repository';
 
 export class CreateUserCommand {
   constructor(public dto: CreateUserDto) {}
