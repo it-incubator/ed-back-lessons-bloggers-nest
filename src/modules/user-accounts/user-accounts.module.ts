@@ -62,17 +62,7 @@ import { UsersExternalService } from './application/users.external-service';
     DeleteUserUseCase,
     RegisterUserUseCase,
     CreateUserUseCase,
-    {
-      provide: AuthService,
-      //вмешиваемся в процесс и вручную инстанцируем класс
-      useFactory: (
-        usersRepository: UsersRepository,
-        cryptoService: CryptoService,
-      ) => {
-        return new AuthService(usersRepository, cryptoService);
-      },
-      inject: [UsersRepository, CryptoService],
-    },
+    AuthService,
     //пример инстанцирования через токен
     //если надо внедрить несколько раз один и тот же класс
     {
