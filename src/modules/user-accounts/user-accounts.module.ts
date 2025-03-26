@@ -11,7 +11,6 @@ import { AuthQueryRepository } from './infrastructure/query/auth.query-repositor
 import { SecurityDevicesController } from './api/security-devices.controller';
 import { UsersExternalQueryRepository } from './infrastructure/external-query/users.external-query-repository';
 import { UsersExternalService } from './application/users.external-service';
-import { LoginIsExistConstraint } from './api/validation/login-is-exist.decorator';
 import { NotificationsModule } from '../notifications/notifications.module';
 import { AuthService } from './application/auth.service';
 import { LocalStrategy } from './guards/local/local.strategy';
@@ -40,7 +39,6 @@ import { JwtStrategy } from './guards/bearer/jwt.strategy';
     UsersQueryRepository,
     SecurityDevicesQueryRepository,
     AuthQueryRepository,
-    LoginIsExistConstraint,
     AuthService,
     LocalStrategy,
     CryptoService,

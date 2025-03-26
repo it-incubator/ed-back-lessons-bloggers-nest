@@ -5,7 +5,6 @@ import {
   passwordConstraints,
 } from '../../domain/user.entity';
 import { IsStringWithTrim } from '../../../../core/decorators/validation/is-string-with-trim';
-import { LoginIsExist } from '../validation/login-is-exist.decorator';
 
 // Доступные декораторы для валидации
 // https://github.com/typestack/class-validator?tab=readme-ov-file#validation-decorators
@@ -13,7 +12,6 @@ import { LoginIsExist } from '../validation/login-is-exist.decorator';
 //dto для боди при создании юзера. Сюда могут быть добавлены декораторы swagger
 export class CreateUserInputDto {
   @IsStringWithTrim(loginConstraints.minLength, loginConstraints.maxLength)
-  @LoginIsExist()
   login: string;
 
   @IsString()
