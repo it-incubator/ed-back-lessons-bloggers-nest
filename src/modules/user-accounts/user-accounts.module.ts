@@ -8,7 +8,6 @@ import { AuthController } from './api/auth.controller';
 import { SecurityDevicesQueryRepository } from './infrastructure/query/security-devices.query-repository';
 import { AuthQueryRepository } from './infrastructure/query/auth.query-repository';
 import { SecurityDevicesController } from './api/security-devices.controller';
-import { LoginIsExistConstraint } from './api/validation/login-is-exist.decorator';
 import { AuthService } from './application/auth.service';
 import { LocalStrategy } from './guards/local/local.strategy';
 import { JwtModule, JwtService } from '@nestjs/jwt';
@@ -85,7 +84,6 @@ const queryHandlers = [GetUserByIdQueryHandler];
     UsersQueryRepository,
     SecurityDevicesQueryRepository,
     AuthQueryRepository,
-    LoginIsExistConstraint,
     LocalStrategy,
     CryptoService,
     LoginUserUseCase,

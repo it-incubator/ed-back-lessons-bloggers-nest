@@ -5,7 +5,6 @@ import {
   passwordConstraints,
 } from '../../domain/user.entity';
 import { IsStringWithTrim } from '../../../../core/decorators/validation/is-string-with-trim';
-import { LoginIsExist } from '../validation/login-is-exist.decorator';
 import { ApiProperty } from '@nestjs/swagger';
 
 // Доступные декораторы для валидации
@@ -14,7 +13,6 @@ import { ApiProperty } from '@nestjs/swagger';
 //dto для боди при создании юзера. Сюда могут быть добавлены декораторы swagger
 export class CreateUserInputDto {
   @IsStringWithTrim(loginConstraints.minLength, loginConstraints.maxLength)
-  @LoginIsExist()
   login: string;
 
   @IsString()
