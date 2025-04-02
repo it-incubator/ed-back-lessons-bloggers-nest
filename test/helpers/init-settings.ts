@@ -28,7 +28,7 @@ export const initSettings = async (
 
   const app = testingAppModule.createNestApplication();
   const coreConfig = app.get<CoreConfig>(CoreConfig);
-  appSetup(app, coreConfig, DynamicAppModule);
+  appSetup(app, coreConfig.isSwaggerEnabled);
 
   await app.init();
 
