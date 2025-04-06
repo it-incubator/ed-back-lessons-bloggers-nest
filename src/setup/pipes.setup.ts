@@ -20,9 +20,9 @@ export const errorFormatter = (
   const errorsForResponse = errorMessage || [];
 
   for (const error of errors) {
-    if (!error?.constraints && error?.children?.length) {
+    if (!error.constraints && error.children?.length) {
       errorFormatter(error.children, errorsForResponse);
-    } else if (error?.constraints) {
+    } else if (error.constraints) {
       const constrainKeys = Object.keys(error.constraints);
 
       for (const key of constrainKeys) {
@@ -48,6 +48,8 @@ export function pipesSetup(app: INestApplication) {
       //соответственно применятся значения по-умолчанию
       //и методы классов dto
       transform: true,
+
+      whitelist: true,
       //Выдавать первую ошибку для каждого поля
       stopAtFirstError: true,
       //Для преобразования ошибок класс валидатора в необходимый вид
