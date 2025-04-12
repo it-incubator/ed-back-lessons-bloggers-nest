@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { UsersExternalQueryRepository } from '../user-accounts/infrastructure/external-query/users.external-query-repository';
-import { UsersExternalService } from '../user-accounts/application/users.external-service';
+import { UsersExternalService } from '../user-accounts/application/external/users.external-service';
 import { Types } from 'mongoose';
 
 @Injectable()

@@ -8,10 +8,10 @@ import { AuthController } from './api/auth.controller';
 import { SecurityDevicesQueryRepository } from './infrastructure/query/security-devices.query-repository';
 import { AuthQueryRepository } from './infrastructure/query/auth.query-repository';
 import { SecurityDevicesController } from './api/security-devices.controller';
-import { AuthService } from './application/auth.service';
+import { AuthService } from './application/services/auth.service';
 import { LocalStrategy } from './guards/local/local.strategy';
 import { JwtModule, JwtService } from '@nestjs/jwt';
-import { CryptoService } from './application/crypto.service';
+import { CryptoService } from './application/services/crypto.service';
 import {
   ACCESS_TOKEN_STRATEGY_INJECT_TOKEN,
   REFRESH_TOKEN_STRATEGY_INJECT_TOKEN,
@@ -22,8 +22,9 @@ import { RegisterUserUseCase } from './application/usecases/users/register-user.
 import { LoginUserUseCase } from './application/usecases/login-user.usecase';
 import { JwtStrategy } from './guards/bearer/jwt.strategy';
 import { UsersExternalQueryRepository } from './infrastructure/external-query/users.external-query-repository';
-import { UsersExternalService } from './application/users.external-service';
+import { UsersExternalService } from './application/external/users.external-service';
 import { GetUserByIdQueryHandler } from './application/queries/get-user-by-id.query';
+import { UsersFactory } from './application/factories/users.factory';
 
 const commandHandlers = [
   DeleteUserUseCase,
@@ -42,19 +43,8 @@ const queryHandlers = [GetUserByIdQueryHandler];
   providers: [
     ...commandHandlers,
     ...queryHandlers,
-    //варианты регистрации провайдеров
     UsersRepository,
-    {
-      provide: AuthService,
-      //вмешиваемся в процесс и вручную инстанцируем класс
-      useFactory: (
-        usersRepository: UsersRepository,
-        cryptoService: CryptoService,
-      ) => {
-        return new AuthService(usersRepository, cryptoService);
-      },
-      inject: [UsersRepository, CryptoService],
-    },
+    AuthService,
     //пример инстанцирования через токен
     //если надо внедрить несколько раз один и тот же класс
     {
@@ -90,6 +80,7 @@ const queryHandlers = [GetUserByIdQueryHandler];
     JwtStrategy,
     UsersExternalQueryRepository,
     UsersExternalService,
+    UsersFactory,
   ],
   exports: [JwtStrategy, UsersExternalQueryRepository, UsersExternalService],
 })
