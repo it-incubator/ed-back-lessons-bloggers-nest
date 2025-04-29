@@ -20,7 +20,12 @@ export class CreateBlogUseCase
   ) {}
 
   async execute({ dto }: CreateBlogCommand): Promise<Types.ObjectId> {
+    console.log('❤️ Execute');
     const entity = this.blogsModel.createInstance(dto);
+
+    // расскоментировать, чтобы увидеть, что там, где мы кидаем команду,
+    // мы можем отловить ошибку, необработанную здесь
+    // throw new Error('oops;');
 
     await this.blogsRepository.save(entity);
 

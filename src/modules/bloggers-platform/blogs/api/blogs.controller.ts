@@ -8,6 +8,7 @@ import {
   Param,
   Query,
   UseGuards,
+  InternalServerErrorException,
 } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { Types } from 'mongoose';
@@ -58,9 +59,36 @@ export class BlogsController {
   @ApiBasicAuth('basicAuth')
   @UseGuards(BasicAuthGuard)
   @Post()
-  async create(@Body() dto: CreateBlogInputDto) {
-    return this.commandBus.execute(new CreateBlogCommand(dto));
+  async create(@Body() dto: CreateBlogInputDto): Promise<BlogViewDto> {
+    console.log('💕 create');
+    try {
+      const id = await this.commandBus.execute<
+        CreateBlogCommand,
+        Types.ObjectId
+      >(new CreateBlogCommand(dto));
+
+      return this.queryBus.execute(new GetBlogByIdQuery(id, null));
+    } catch {
+      // queryBus как и commandBus если мы ставим await дожидаются, когда хендлер отработает.
+      // и можем таким способом отловить ошибку, анпример, или просто дождаться исполнения,
+      // в отличие от eventBus
+      // почему так? потому что у command/query один обработчик, а у
+      // event-а может быть много обработчиков.
+      console.log('😭');
+      throw new InternalServerErrorException();
+    }
   }
+
+  // @ApiBasicAuth('basicAuth')
+  // @UseGuards(BasicAuthGuard)
+  // @Post()
+  // async create(@Body() dto: CreateBlogInputDto): Promise<BlogViewDto> {
+  //   const id = generateId();
+  //   this.commandBus.execute<CreateBlogCommand, Types.ObjectId>(
+  //     new CreateBlogCommand(dto, id),
+  //   );
+  //   return id;
+  // }
 
   @ApiBasicAuth('basicAuth')
   @UseGuards(BasicAuthGuard)

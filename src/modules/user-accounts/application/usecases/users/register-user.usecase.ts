@@ -22,11 +22,20 @@ export class RegisterUserUseCase
   ) {}
 
   async execute({ dto }: RegisterUserCommand): Promise<void> {
-    const user = await this.usersFactory.create(dto);
-    const confirmCode = 'uuid';
-    user.setConfirmationCode(confirmCode);
-    await this.usersRepository.save(user);
+    try {
+      const user = await this.usersFactory.create(dto);
+      const confirmCode = 'uuid';
+      user.setConfirmationCode(confirmCode);
+      // ивенты могут возвращаться из метода сущности
+      //const events = user.setConfirmationCode(confirmCode);
+      await this.usersRepository.save(user);
 
-    this.eventBus.publish(new UserRegisteredEvent(user.email, confirmCode));
+      this.eventBus.publish(new UserRegisteredEvent(user.email, confirmCode));
+      // а могут просто накапливаться в сущности и в конце мы можем у неё
+      // попросить данные ивенты, чтиобы опубликовать их
+      // this.eventBus.publish(user.getEvents());
+    } catch {
+      // transaction.rollback();
+    }
   }
 }
